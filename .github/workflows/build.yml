@@ -5,6 +5,11 @@ on:
     branches: [main]
     tags: ['v*']
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version fuer das Release, z. B. v1.1 (leer = nur bauen)'
+        required: false
+        default: ''
 
 permissions:
   contents: write
@@ -30,9 +35,11 @@ jobs:
           name: Achterbahn-Windows
           path: Achterbahn-Windows.zip
       - name: Release anhängen
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: startsWith(github.ref, 'refs/tags/v') || inputs.version != ''
         uses: softprops/action-gh-release@v2
         with:
-          name: Achterbahn ${{ github.ref_name }}
+          tag_name: ${{ inputs.version || github.ref_name }}
+          target_commitish: ${{ github.sha }}
+          name: Achterbahn ${{ inputs.version || github.ref_name }}
           body_path: RELEASE.md
           files: Achterbahn-Windows.zip

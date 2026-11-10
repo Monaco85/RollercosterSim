@@ -118,7 +118,7 @@ Pitch und Roll sind schon fertig gemischt. Der Sitz kippt am Lifthügel nach hin
 | `bridge/` | Windows-Programm in Go. `index.html` ist die fertige Spielseite und wird in die EXE eingebettet. |
 | `web-quelltext/` | Lesbarer Quelltext der Spielseite, Stand 2.11.2026 |
 | `docs/bilder/` | Vorschaubilder für diese Seite |
-| `.github/workflows/` | Baut bei jedem Push die EXE. Bei einem Tag wie `v1.1` entsteht ein Release. |
+| `.github/workflows/` | Baut bei jedem Push die EXE. Mit einer Version beim manuellen Start entsteht ein Release. |
 
 **Achtung:** `bridge/index.html` ist neuer als `web-quelltext/`. Kulisse, Kuppen-Fix und das neue Bewegungsmodell wurden direkt in der fertigen Seite geändert. Wer neu aus `web-quelltext/` baut, verliert diese Änderungen.
 
@@ -129,4 +129,4 @@ cd bridge
 GOOS=windows GOARCH=amd64 go build -trimpath -ldflags "-s -w" -o Achterbahn.exe .
 ```
 
-Neue Version veröffentlichen: `RELEASE.md` anpassen, dann einen Tag wie `v1.1` pushen. GitHub baut die EXE und hängt sie an das Release.
+Neue Version veröffentlichen: `RELEASE.md` anpassen und pushen. Dann unter **Actions**, „Windows-EXE bauen“, **Run workflow** mit einer Version wie `v1.1` starten. GitHub baut die EXE, legt den Tag an und hängt die ZIP an das Release. Ein gepushter Tag wie `v1.1` funktioniert genauso.
