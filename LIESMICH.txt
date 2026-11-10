@@ -1,0 +1,66 @@
+ACHTERBAHN FÜR DEN RENNSITZ
+
+Voraussetzung: Windows, SimHub ab Version 9.11.5 (am besten die neueste).
+
+NEU IN DIESER VERSION (10.11.2026)
+Mehr Kulisse: Bergketten, Sonnenglut, Vogelschwärme, Windräder und ein kleiner
+Jahrmarkt. Auf der Kuppe kippt der Sitz nicht mehr vorzeitig nach vorn, erst
+wenn der Zug wirklich fällt. Die SimHub-Anbindung ist unverändert, Einstellungen
+in SimHub bleiben erhalten. Einfach die alte Achterbahn.exe ersetzen.
+Windows warnt beim ersten Start wieder, weil die Datei neu ist:
+Rechtsklick, Eigenschaften, "Zulassen" anhaken, oder "Weitere Informationen"
+und "Trotzdem ausführen".
+
+START
+1. Ordner entpacken und Achterbahn.exe doppelklicken.
+   Windows warnt beim ersten Mal, weil die Datei nicht signiert ist:
+   "Weitere Informationen" und dann "Trotzdem ausführen".
+2. Beim ersten Start trägt sich die Achterbahn selbst in SimHub ein.
+   Danach SimHub einmal neu starten und "Achterbahn" in der Spieleliste aktivieren.
+3. In der Achterbahn muss oben rechts "Sitz verbunden" stehen.
+
+ERSTE FAHRT
+1. Ohne Kind auf dem Sitz: Stärke "Sanft" wählen, dann "Sitz testen".
+   Die Seite sagt an, wohin der Sitz fahren soll. Stimmt eine Richtung nicht,
+   in SimHub bei der Achse das Vorzeichen umdrehen.
+2. Startwerte in SimHub für dieses Spiel (Schätzung, bitte nachfühlen):
+   Global 50 %, Surge to Pitch 100 %, Sway to Roll 100 %, Pitch 60 %, Roll 60 %,
+   Heave 20 %, Yaw aus, Traction Loss aus.
+   Prüfe, dass deine Assetto-Corsa-Werte danach noch stimmen.
+3. Erst die Kleine Raupe alleine fahren, dann gemeinsam.
+
+KRAFT
+Der Regler "Kraft" im Menü wirkt zusätzlich auf jede Stärke, von 50 bis 500 %.
+Er bleibt gespeichert, gilt also auch für "Sanft". Vor einer Fahrt mit Kind prüfen.
+Nach jeder Erhöhung zuerst ohne Mitfahrer "Sitz testen" laufen lassen.
+
+BEDIENUNG
+Leertaste, Enter, Lenkradtaste   Start, sofort Stopp, Weiter
+C                                Kamera wechseln
+Esc                              zurück zur Bahnwahl
+1, 2, 3 / Pfeile                 Bahn wählen
+Alt+F4                           Fenster schließen
+
+BASS SHAKER
+Im Menü "Bass Shaker" öffnen und einschalten.
+"Geräte suchen" fragt einmal nach dem Mikrofon. Das braucht der Browser nur für die
+Gerätenamen, es wird nichts aufgenommen. Dann den Ausgang des Shaker-Verstärkers wählen.
+Links ist vorne, rechts ist hinten. Mit "Vorne" und "Hinten" prüfen, sonst "Tauschen".
+Bei 30 % anfangen. Läuft SimHub ShakeIt auf denselben Shakern, dort die Effekte für
+dieses Spiel leiser stellen, sonst doppelt sich das Rütteln.
+
+SICHERHEIT
+Bei Stopp, Esc und am Fahrtende fährt der Sitz in 2,5 s weich in die Mitte.
+Stürzt die Seite ab, blendet das Programm die Bewegung selbst aus.
+Winkel, Kräfte und Stellgeschwindigkeit sind je Stärke begrenzt.
+Die Mechanik schützt das nicht: Kinderhände weg von Hebeln und Motoren,
+und niemand steht neben dem Sitz, solange er fährt.
+
+WENN ES HAKT
+"SimHub-Einrichtung fehlt": Meldung im schwarzen Fenster lesen, SimHub aktualisieren.
+"SimHub empfängt noch nicht": Spiel in SimHub noch nicht aktiviert.
+Nur fahren ohne Sitz geht immer.
+
+QUELLTEXT
+src: Strecken, Physik, Motion, 3D. bridge: Windows-Programm (Go).
+node build.mjs, dann bridge/index.html aus web/ kopieren, go build.

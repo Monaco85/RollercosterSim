@@ -1,0 +1,4 @@
+*.exe
+bridge/bruecke_linux
+node_modules/
+web-quelltext/web/
