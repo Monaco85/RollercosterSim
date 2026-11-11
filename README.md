@@ -101,7 +101,7 @@ Jedes Paket hat 188 Bytes im Format, das SimHub für External Sims vorgibt. Zuer
 - **Standardfelder:** Gier, Pitch und Roll in Grad samt Drehraten, Surge, Sway und Heave in m/s², Geschwindigkeiten, Position, km/h, Drehzahl, Antrieb, Bremse.
 - **Eigene Felder:** Zeitstempel, Tempo in m/s und mph, Rumpeln, G-Kraft seitlich, nach oben und nach vorn, Kettenlift, Abschuss, Bremse, Schwerelos, Landung.
 
-Pitch und Roll sind schon fertig gemischt. Der Sitz kippt am Lifthügel nach hinten und erst beim echten Fallen nach vorn. Die Stärke im Spiel, also „Sanft“, „Normal“, „Kräftig“ und der Kraft-Regler, wirkt zusätzlich zu den Gains in SimHub.
+Pitch und Roll sind schon fertig gemischt. Der Sitz kippt am Lifthügel nach hinten und erst beim echten Fallen nach vorn. In Kurven legt sich der Sitz nach innen, wie ein Motorrad. Die Fliehkraft drückt dich also nicht nach außen. Dafür ist auch das Vorzeichen von Sway umgedreht, damit „Sway to Roll“ in SimHub in dieselbe Richtung wirkt. Die Stärke im Spiel, also „Sanft“, „Normal“, „Kräftig“ und der Kraft-Regler, wirkt zusätzlich zu den Gains in SimHub.
 
 ## Sicherheit
 
