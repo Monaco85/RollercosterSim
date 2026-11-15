@@ -28,7 +28,8 @@ jobs:
       - name: Paket zusammenstellen
         run: |
           mkdir -p paket/Achterbahn
-          cp Achterbahn.exe LIESMICH.txt paket/Achterbahn/
+          cp Achterbahn.exe LIESMICH.txt "bridge/SimHub neu einrichten.bat" paket/Achterbahn/
+          cp bridge/index.html paket/Achterbahn/spiel.html
           cd paket && zip -qr ../Achterbahn-Windows.zip Achterbahn
       - uses: actions/upload-artifact@v4
         with:

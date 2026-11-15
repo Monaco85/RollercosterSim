@@ -2,19 +2,33 @@ ACHTERBAHN FÜR DEN RENNSITZ
 
 Voraussetzung: Windows, SimHub ab Version 9.11.5 (am besten die neueste).
 
-NEU IN DIESER VERSION (10.11.2026)
-Mehr Kulisse: Bergketten, Sonnenglut, Vogelschwärme, Windräder und ein kleiner
-Jahrmarkt. Auf der Kuppe kippt der Sitz nicht mehr vorzeitig nach vorn, erst
-wenn der Zug wirklich fällt. Die SimHub-Anbindung ist unverändert, Einstellungen
-in SimHub bleiben erhalten. Einfach die alte Achterbahn.exe ersetzen.
-Windows warnt beim ersten Start wieder, weil die Datei neu ist:
-Rechtsklick, Eigenschaften, "Zulassen" anhaken, oder "Weitere Informationen"
-und "Trotzdem ausführen".
+WINDOWS BLOCKIERT DIE EXE
+Achterbahn.exe ist nicht signiert. Windows blockiert deshalb jede neue Fassung
+beim ersten Start. So geht es am einfachsten:
+1. VOR dem Entpacken: Rechtsklick auf die heruntergeladene ZIP-Datei,
+   "Eigenschaften", unten "Zulassen" anhaken, OK. Erst dann entpacken.
+   Dann tragen die entpackten Dateien keinen Internet-Vermerk mehr.
+2. Kommt trotzdem der blaue Hinweis "Der Computer wurde durch Windows
+   geschützt": "Weitere Informationen", dann "Trotzdem ausführen".
+3. Ist die Datei nach dem Entpacken verschwunden oder meldet Windows eine
+   Bedrohung: Windows-Sicherheit, Viren- & Bedrohungsschutz, Schutzverlauf.
+   Dort die Achterbahn.exe wiederherstellen und zulassen.
+4. Steht dort "Intelligente App-Steuerung": Diese Windows-11-Funktion kennt
+   keine Ausnahme für einzelne Dateien. Dann bitte melden, statt sie
+   abzuschalten. Abschalten lässt sie sich nur dauerhaft.
+
+SPIEL-UPDATES OHNE NEUE EXE
+Ab dieser Version steckt das Spiel in der Datei spiel.html neben der EXE.
+Bei einem Spiel-Update musst du nur spiel.html ersetzen. Achterbahn.exe bleibt
+gleich, und Windows fragt nicht noch einmal. Fehlt spiel.html, startet das
+eingebaute Spiel.
+Die EXE prüft die SimHub-Einrichtung nur noch beim allerersten Start. Kommt
+nach einem SimHub-Update im Spiel "SimHub empfängt noch nicht", einmal
+"SimHub neu einrichten.bat" doppelklicken.
 
 START
-1. Ordner entpacken und Achterbahn.exe doppelklicken.
-   Windows warnt beim ersten Mal, weil die Datei nicht signiert ist:
-   "Weitere Informationen" und dann "Trotzdem ausführen".
+1. ZIP-Datei wie oben beschrieben zulassen, entpacken und
+   Achterbahn.exe doppelklicken. spiel.html muss im selben Ordner liegen.
 2. Beim ersten Start trägt sich die Achterbahn selbst in SimHub ein.
    Danach SimHub einmal neu starten und "Achterbahn" in der Spieleliste aktivieren.
 3. In der Achterbahn muss oben rechts "Sitz verbunden" stehen.

@@ -31,7 +31,13 @@ Die Seite gibt es auch als Artefakt auf claude.ai: [Achterbahn am Rennsitz](http
 3. `Achterbahn.exe` doppelklicken. Es öffnen sich ein schwarzes Konsolenfenster und das Spiel im Edge-Vollbild. Das Konsolenfenster offen lassen.
 4. Oben rechts im Spiel muss „Sitz verbunden“ stehen.
 
-Die EXE ist nicht signiert. Beim ersten Start warnt Windows: Rechtsklick auf die Datei, Eigenschaften, „Zulassen“ anhaken. Alternativ „Weitere Informationen“ und „Trotzdem ausführen“.
+Die EXE ist nicht signiert, deshalb blockiert Windows jede neue Fassung beim ersten Start. Am einfachsten: **vor dem Entpacken** Rechtsklick auf die ZIP-Datei, Eigenschaften, „Zulassen“ anhaken. Kommt trotzdem eine Warnung: „Weitere Informationen“ und „Trotzdem ausführen“. Weitere Fälle stehen in der LIESMICH.txt.
+
+### Spiel-Updates ohne neue EXE
+
+Ab Version 1.2 liegt das Spiel als `spiel.html` neben der EXE. Ändert sich nur das Spiel, ersetzt du nur diese Datei. `Achterbahn.exe` bleibt gleich, und Windows muss sie nicht neu prüfen. Fehlt `spiel.html`, startet das in die EXE eingebaute Spiel.
+
+Die EXE fragt SimHub nur beim allerersten Start nach der Kennung. Danach nutzt sie die gespeicherte Definition und startet kein PowerShell mehr. Nach einem SimHub-Update kann man mit `SimHub neu einrichten.bat` die Kennung neu ausrechnen lassen.
 
 Bedienung, Startwerte und Sicherheitshinweise stehen in der [LIESMICH.txt](LIESMICH.txt).
 
@@ -115,7 +121,7 @@ Pitch und Roll sind schon fertig gemischt. Der Sitz kippt am Lifthügel nach hin
 
 | Ordner | Inhalt |
 |---|---|
-| `bridge/` | Windows-Programm in Go. `index.html` ist die fertige Spielseite und wird in die EXE eingebettet. |
+| `bridge/` | Windows-Programm in Go. `index.html` ist die fertige Spielseite. Sie kommt als `spiel.html` ins Release und steckt zusätzlich als Ersatz in der EXE. |
 | `web-quelltext/` | Lesbarer Quelltext der Spielseite, Stand 2.11.2026 |
 | `docs/bilder/` | Vorschaubilder für diese Seite |
 | `.github/workflows/` | Baut bei jedem Push die EXE. Mit einer Version beim manuellen Start entsteht ein Release. |

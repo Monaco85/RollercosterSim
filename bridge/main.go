@@ -30,6 +30,9 @@ var page []byte
 var setupScript []byte
 
 const addr = "127.0.0.1:8765"
+
+// Programmversion der EXE. Nur erhoehen, wenn sich die EXE wirklich aendern muss.
+const version = "2"
 const frameLen = 31
 
 type link struct {
@@ -225,9 +228,19 @@ func install() {
 		return
 	}
 	def := simdefPath()
+	old := readSignature()
+	// Schon eingerichtet: nichts anfassen und SimHub nicht befragen.
+	// Neu einrichten (z. B. nach einem SimHub-Update) nur mit "-einrichten".
+	if old != 0 && !neuEinrichten() {
+		if _, err := os.Stat(linkPath()); err == nil {
+			telemetrySig = old
+			fmt.Printf("SimHub-Einrichtung vorhanden (Signatur %08X).\n", old)
+			fmt.Println("Kommt in SimHub nichts an, \"SimHub neu einrichten.bat\" starten.")
+			return
+		}
+	}
 	os.MkdirAll(filepath.Dir(def), 0o755)
 	os.MkdirAll(filepath.Dir(linkPath()), 0o755)
-	old := readSignature()
 	data, _ := simdefJSON(old)
 	os.WriteFile(def, data, 0o644)
 	os.WriteFile(linkPath(), []byte(def), 0o644)
@@ -272,6 +285,35 @@ func install() {
 	fmt.Println("Bitte SimHub auf den neuesten Stand bringen (mindestens 9.11.5). Die Fahrt laeuft trotzdem, nur ohne Sitz.")
 }
 
+func neuEinrichten() bool {
+	for _, a := range os.Args[1:] {
+		if strings.EqualFold(strings.TrimLeft(a, "-/"), "einrichten") {
+			return true
+		}
+	}
+	return false
+}
+
+// Die Spielseite liegt als spiel.html neben der EXE. So aendert ein Spiel-Update
+// nur diese Datei, die EXE bleibt gleich und Windows muss sie nicht neu pruefen.
+// Fehlt die Datei, nimmt das Programm die eingebaute Seite.
+func spielPfad() string {
+	exe, err := os.Executable()
+	if err != nil {
+		return ""
+	}
+	return filepath.Join(filepath.Dir(exe), "spiel.html")
+}
+
+func spielSeite() []byte {
+	if p := spielPfad(); p != "" {
+		if b, err := os.ReadFile(p); err == nil && len(b) > 0 {
+			return b
+		}
+	}
+	return page
+}
+
 func open() {
 	url := "http://" + addr + "/"
 	if runtime.GOOS != "windows" {
@@ -288,15 +330,25 @@ func open() {
 }
 
 func main() {
-	fmt.Println("Achterbahn fuer den Rennsitz")
+	fmt.Println("Achterbahn fuer den Rennsitz, Programm " + version)
 	fmt.Println("Fenster offen lassen, solange gefahren wird.")
 	install()
 	go sender()
 	mux := http.NewServeMux()
-	html := append([]byte("<!doctype html><html lang=\"de\"><head><meta charset=\"utf-8\">"), page...)
+	if b, err := os.ReadFile(spielPfad()); err == nil && len(b) > 0 {
+		fmt.Println("Spiel aus spiel.html neben der EXE.")
+	} else {
+		fmt.Println("spiel.html nicht gefunden, nehme das eingebaute Spiel.")
+	}
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/" {
+			http.NotFound(w, r)
+			return
+		}
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		w.Write(html)
+		w.Header().Set("Cache-Control", "no-store")
+		w.Write([]byte("<!doctype html><html lang=\"de\"><head><meta charset=\"utf-8\">"))
+		w.Write(spielSeite())
 	})
 	mux.HandleFunc("/telemetrie", ws)
 	l, err := net.Listen("tcp4", addr)
