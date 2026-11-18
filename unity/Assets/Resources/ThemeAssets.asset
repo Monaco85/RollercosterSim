@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ece167dab66b384cbc51d6a00e87276, type: 3}
+  m_Name: ThemeAssets
+  m_EditorClassIdentifier: 
+  sky: {fileID: 2100000, guid: 8fb956b84e49de24b822853796e106af, type: 2}
+  grass: {fileID: 2100000, guid: 5ec51dab1e8ac274c93c7c67bab1c016, type: 2}
+  path: {fileID: 2100000, guid: c296f2cae5ef88c458ceddf0cd360d3d, type: 2}
+  cobble: {fileID: 2100000, guid: cae56d370d6feef4d8075c35434388f3, type: 2}
+  castleWall: {fileID: 2100000, guid: 188f3e2ab246f3f429255630f6010f5c, type: 2}
+  stoneBlocks: {fileID: 2100000, guid: 57a8beb2aa530b84187cbf5eee3df147, type: 2}
+  timberWall: {fileID: 2100000, guid: 90de32313d7f6a342b31c696990b9587, type: 2}
+  roofSlate: {fileID: 2100000, guid: 53adb179ceb6d8a40b7f8e5055b1cf71, type: 2}
+  roofThatch: {fileID: 2100000, guid: 3f3befe9876e8774899f3c5133365617, type: 2}
+  woodStructure: {fileID: 2100000, guid: e377d2c58031bc6419224618793e32f5, type: 2}
+  woodDeck: {fileID: 2100000, guid: cfa64189f2ad0c940b2e770541d63a32, type: 2}
+  treeBark: {fileID: 2100000, guid: 6c48ea515a84a494dbdfd140fcbe3f40, type: 2}
+  treeBranch: {fileID: 2100000, guid: 66bf93513b574604bba11ee6cb89f419, type: 2}
+  terrain: {fileID: 2100000, guid: b626dc4ce3796c242b05460e106994d5, type: 2}
+  grassCard: {fileID: 2100000, guid: 158c1631db50b3b4cbc12219f9cde34d, type: 2}
+  smoke: {fileID: 2100000, guid: 63b1e71092261c348a736e98209071e0, type: 2}
+  fire: {fileID: 2100000, guid: 1f1924f4359c36f439cfed428b5d1612, type: 2}
+  layers:
+  - {fileID: 8574412962073106934, guid: 3c2bf8e5ae68b084f8daf8767b133eaa, type: 2}
+  - {fileID: 8574412962073106934, guid: 82e50787af123aa43aad859bbb397db7, type: 2}
+  - {fileID: 8574412962073106934, guid: a07853fa8e6b68b4bba17214f0d730c8, type: 2}
+  - {fileID: 8574412962073106934, guid: bbda1a39f9462524c8bdff6004bce6b7, type: 2}
+  - {fileID: 8574412962073106934, guid: 7d1555c75a2d7fa4d96bb3336bfb9fab, type: 2}
+  dinoSkin: {fileID: 2100000, guid: 4c7782bc23c3fd8488581ac7a0178f40, type: 2}
+  palmBark: {fileID: 2100000, guid: 753df68b09ff533438bcd0b0f59e6566, type: 2}
+  frond: {fileID: 2100000, guid: f20f2696d6e9acf49ba3fc35d3bf2b95, type: 2}
+  rockWall: {fileID: 2100000, guid: dbb5c13ed1440c0449c6e175b13d57e9, type: 2}
+  water: {fileID: 2100000, guid: 7e40abd76ec887b409f22283a0b8004d, type: 2}
+  leaves: {fileID: 2100000, guid: 991a4a0f9d1584c42b42cedfb915a582, type: 2}
+  conifers: []
+  broadleaf: []
+  shrubs:
+  - {fileID: 919132149155446097, guid: e83c6eae61a389141bc4c2ee31f03392, type: 3}
+  - {fileID: 919132149155446097, guid: 7e589e4150cf23747bed007a23482ca7, type: 3}
+  rocks:
+  - {fileID: 919132149155446097, guid: 35e398c22f374844daa451d55ef7057e, type: 3}
+  - {fileID: 919132149155446097, guid: d719c878838254d4b9511a669f723d09, type: 3}
+  props:
+  - {fileID: 919132149155446097, guid: 000488823ad41c9429a23f69f5513567, type: 3}
+  - {fileID: 919132149155446097, guid: 2736eb1f7ccb24b4f9909a3535dea085, type: 3}
+  castleDoor: {fileID: 919132149155446097, guid: e5fb916cba772fd48b8b9a99ee46c912, type: 3}
+  lantern: {fileID: 919132149155446097, guid: 0200d472eeb01bc4c980974827e10899, type: 3}

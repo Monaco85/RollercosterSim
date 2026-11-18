@@ -1,0 +1,19 @@
+# Von Unity erzeugt, wird beim Oeffnen neu angelegt
+/Library/
+/Temp/
+/Logs/
+/obj/
+/Build/
+/Builds/
+/UserSettings/
+/MemoryCaptures/
+/.vs/
+*.csproj
+*.sln
+*.user
+*.pidb
+*.booproj
+*.unityproj
+.mcp.json
+Assets/Resources/PerformanceTestRun*.json
+Assets/Resources/PerformanceTestRun*.json.meta

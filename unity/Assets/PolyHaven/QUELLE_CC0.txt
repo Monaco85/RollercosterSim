@@ -1,0 +1,9 @@
+Alle Dateien in diesem Ordner stammen von Poly Haven (https://polyhaven.com) und stehen unter CC0 (gemeinfrei, keine Namensnennung noetig).
+
+Himmel (HDRI): kloofendal_48d_partly_cloudy_puresky
+Texturen: aerial_grass_rock, leafy_grass, forrest_ground_01, stony_dirt_path, cobblestone_floor_01, castle_wall_slates, medieval_blocks_02,
+          beam_wall_01, weathered_planks, wood_planks, red_slate_roof_tiles_01, thatch_roof_angled
+Baum-Texturen (Rinde, Zweige): aus fir_tree_01 (das Modell selbst ist zu gross fuer Echtzeit und wird nicht verwendet)
+Modelle: shrub_02, shrub_04, rock_moss_set_01, boulder_01, wooden_barrels_01, wooden_crate_01, wooden_lantern_01, large_castle_door
+
+Selbst erzeugt (Assets/Generated): fir_branch.png (Tannenzweig), grass_blades.png (Grashalme), smoke_puff.png (Rauch).
