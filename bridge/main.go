@@ -32,7 +32,7 @@ var setupScript []byte
 const addr = "127.0.0.1:8765"
 
 // Programmversion der EXE. Nur erhoehen, wenn sich die EXE wirklich aendern muss.
-const version = "2"
+const version = "3"
 const frameLen = 31
 
 type link struct {
@@ -285,14 +285,21 @@ func install() {
 	fmt.Println("Bitte SimHub auf den neuesten Stand bringen (mindestens 9.11.5). Die Fahrt laeuft trotzdem, nur ohne Sitz.")
 }
 
-func neuEinrichten() bool {
+func hatSchalter(name string) bool {
 	for _, a := range os.Args[1:] {
-		if strings.EqualFold(strings.TrimLeft(a, "-/"), "einrichten") {
+		if strings.EqualFold(strings.TrimLeft(a, "-/"), name) {
 			return true
 		}
 	}
 	return false
 }
+
+func neuEinrichten() bool { return hatSchalter("einrichten") }
+
+// Mit "-ohnefenster" oeffnet die EXE kein Spielfenster in Edge. Fuer das Unity-Spiel,
+// das sich selbst mit /telemetrie verbindet. Sonst schickt das HTML-Spiel im Menue
+// eigene Null-Frames, und zwei Spiele melden sich abwechselnd beim Sitz.
+func ohneFenster() bool { return hatSchalter("ohnefenster") }
 
 // Die Spielseite liegt als spiel.html neben der EXE. So aendert ein Spiel-Update
 // nur diese Datei, die EXE bleibt gleich und Windows muss sie nicht neu pruefen.
@@ -357,7 +364,11 @@ func main() {
 		time.Sleep(6 * time.Second)
 		return
 	}
-	go open()
+	if ohneFenster() {
+		fmt.Println("Ohne Spielfenster. Jetzt das Unity-Spiel starten, es verbindet sich selbst.")
+	} else {
+		go open()
+	}
 	fmt.Println("Laeuft auf http://" + addr)
 	http.Serve(l, mux)
 }

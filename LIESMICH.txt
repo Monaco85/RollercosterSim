@@ -55,6 +55,16 @@ Esc                              zurück zur Bahnwahl
 1, 2, 3 / Pfeile                 Bahn wählen
 Alt+F4                           Fenster schließen
 
+UNITY-SPIEL
+Für das Unity-Spiel nicht Achterbahn.exe doppelklicken, sondern
+"Bruecke fuer Unity starten.bat". Dann öffnet sich kein Spielfenster in Edge,
+nur das schwarze Fenster. Es bleibt offen, solange gefahren wird.
+Danach das Unity-Spiel starten. Oben rechts muss "Sitz verbunden" stehen.
+Nie beide Spiele gleichzeitig offen haben, sonst melden sich zwei Spiele beim Sitz.
+Verliert das Unity-Fenster den Fokus, hält die Fahrt an und der Sitz fährt in die Mitte.
+Im Unity-Spiel beendet zweimal Esc in der Bahnwahl das Programm. F11 wechselt
+zwischen Vollbild und Fenster. Das Unity-Projekt liegt im Ordner "unity".
+
 BASS SHAKER
 Im Menü "Bass Shaker" öffnen und einschalten.
 "Geräte suchen" fragt einmal nach dem Mikrofon. Das braucht der Browser nur für die
