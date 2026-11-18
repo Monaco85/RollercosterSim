@@ -265,6 +265,7 @@ namespace Achterbahn
                     else if (kb.digit3Key.wasPressedThisFrame) Load(2);
                     else if (kb.digit4Key.wasPressedThisFrame) Load(3);
                     else if (kb.digit5Key.wasPressedThisFrame && defs.Length > 4) Load(4);
+                    else if (kb.digit6Key.wasPressedThisFrame && defs.Length > 5) Load(5);
                     else if (kb.rightArrowKey.wasPressedThisFrame) Load((idx + 1) % defs.Length);
                     else if (kb.leftArrowKey.wasPressedThisFrame) Load((idx + defs.Length - 1) % defs.Length);
                 }
@@ -443,7 +444,7 @@ namespace Achterbahn
                 var qr = new Rect(W / 2 - 220, H / 2 - 30, 440, 60); Box(qr, new Color(0, 0, 0, .8f));
                 GUI.Label(qr, "Nochmal Esc drücken zum Beenden", new GUIStyle(sText) { alignment = TextAnchor.MiddleCenter, fontSize = 22 });
             }
-            GUI.Label(new Rect(24, H - 34, W - 200, 30), "Leertaste/Enter/Lenkradtaste Start · C Kamera · 1–5 / Pfeile Bahn · Esc Bahnwahl, 2× Esc Beenden · F11 Fenster/Vollbild", sSmall);
+            GUI.Label(new Rect(24, H - 34, W - 200, 30), "Leertaste/Enter/Lenkradtaste Start · C Kamera · 1–6 / Pfeile Bahn · Esc Bahnwahl, 2× Esc Beenden · F11 Fenster/Vollbild", sSmall);
         }
 
         void DrawHud(float W, float H)

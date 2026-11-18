@@ -93,6 +93,13 @@ namespace Achterbahn
                 DinoWorld.Jungle(root, ta, clr, gr, w.center, w.radius, track);
                 DinoWorld.Volcano(def, root, gr);
             }
+            else if (def.theme == "rummel")
+            {
+                BuildRails(track, def, root);
+                BuildSupports(track, def, root);
+                FairWorld.Build(def, track, root, ta, clr, gr, w.center, w.radius);
+                Scenery.Nature(root, ta, clr, gr, w.center, w.radius, 160, false);
+            }
             else if (def.theme == "holz")
             {
                 Scenery.WoodTrack(track, root, ta, p => false);

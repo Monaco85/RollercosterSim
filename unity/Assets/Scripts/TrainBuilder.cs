@@ -28,6 +28,7 @@ namespace Achterbahn
 
         public static Transform Car(TrackDef def, int index, Transform parent, ThemeAssets ta)
         {
+            if (def.theme == "rummel") return Kleinwagen(index, parent);
             bool dino = def.theme == "dino", wood = def.theme == "mittelalter" || def.theme == "holz";
             var car = new GameObject("Wagen " + (index + 1)).transform;
             car.SetParent(parent, false);
@@ -156,6 +157,96 @@ namespace Achterbahn
             if (pink.Count > 0) pink.ToObject("Mausnase", Lit(new Color(.95f, .5f, .62f), .6f, 0), car);
             if (dino) bone.ToObject("Platten und Zaehne", Lit(new Color(.84f, .8f, .66f), .4f, 0), car);
             if (eyes.Count > 0) eyes.ToObject(dino ? "Augen" : "Lichter", dino ? Lit(new Color(.9f, .55f, .05f), .95f, 0) : Lit(new Color(1f, .97f, .85f), .95f, 0), car);
+            return car;
+        }
+
+        /// <summary>
+        /// Wilde-Maus-Wagen im Stil eines kantigen italienischen Kleinwagens der 90er (Cinquecento Sporting):
+        /// offen ohne Dach, Rechteckscheinwerfer, schwarze Stossfaenger, Seitenstreifen, kleine Alufelgen. Ohne Markenzeichen.
+        /// </summary>
+        static Transform Kleinwagen(int index, Transform parent)
+        {
+            var car = new GameObject("Wagen " + (index + 1)).transform;
+            car.SetParent(parent, false);
+            var body = new MeshBuilder(); var black = new MeshBuilder(); var chrome = new MeshBuilder(); var pad = new MeshBuilder();
+            var glassL = new MeshBuilder(); var red = new MeshBuilder(); var amber = new MeshBuilder(); var stripe = new MeshBuilder();
+            var Q = Quaternion.identity;
+            const float W = 1.5f, L = 3.2f, hw = W / 2;
+
+            // Wanne: Boden, Seitenwaende, Motorhaube, Front, Heck
+            body.Box(V(0, .42f, 0), Q, V(W - .06f, .12f, L - .1f));
+            foreach (float s in new[] { -1f, 1f })
+            {
+                body.Box(V(s * (hw - .04f), .72f, -.25f), Q, V(.08f, .66f, L - .6f));
+                stripe.Box(V(s * (hw + .002f), .6f, -.05f), Q, V(.01f, .07f, L - .5f));                       // Sporting-Streifen
+                black.Box(V(s * (hw + .01f), .45f, 0), Q, V(.04f, .16f, 1.5f));                               // Schweller
+                black.Box(V(s * (hw + .02f), 1.08f, .62f), Q, V(.06f, .09f, .14f));                           // Spiegel
+                black.Box(V(s * (hw + .07f), 1.1f, .56f), Q, V(.08f, .14f, .2f));
+            }
+            body.Box(V(0, .72f, 1.12f), Quaternion.Euler(7, 0, 0), V(W - .04f, .14f, .95f));                 // Motorhaube, flach geneigt
+            body.Box(V(0, .6f, 1.57f), Q, V(W - .04f, .36f, .1f));                                            // Front
+            body.Box(V(0, .78f, -1.47f), Q, V(W - .04f, .74f, .26f));                                         // Heck
+            body.Box(V(0, 1.13f, -1.42f), Quaternion.Euler(-30, 0, 0), V(W - .1f, .05f, .34f));               // Heckklappe-Ansatz
+            black.Box(V(0, 1.2f, -1.56f), Quaternion.Euler(-10, 0, 0), V(W - .2f, .04f, .22f));               // Dachspoiler-Andeutung
+
+            // Stossfaenger und Front
+            black.Box(V(0, .48f, 1.64f), Q, V(W + .04f, .2f, .14f));
+            black.Box(V(0, .5f, -1.63f), Q, V(W + .04f, .2f, .14f));
+            black.Box(V(0, .78f, 1.625f), Q, V(.5f, .1f, .03f));                                              // Grill-Schlitz
+            foreach (float s in new[] { -1f, 1f })
+            {
+                glassL.Box(V(s * .48f, .8f, 1.625f), Q, V(.4f, .17f, .03f));                                  // Rechteckscheinwerfer
+                amber.Box(V(s * .7f, .8f, 1.62f), Q, V(.06f, .14f, .04f));                                    // Blinker
+                glassL.Box(V(s * .45f, .5f, 1.715f), Q, V(.12f, .07f, .02f));                                 // Nebelscheinwerfer
+                red.Box(V(s * .54f, .9f, -1.605f), Q, V(.3f, .22f, .04f));                                    // Ruecklichter
+                amber.Box(V(s * .54f, .76f, -1.605f), Q, V(.3f, .06f, .04f));
+            }
+
+            // Windschutzscheiben-Rahmen (ohne Glas, damit die Sicht frei bleibt), niedrig unter der Augenhoehe
+            foreach (float s in new[] { -1f, 1f }) black.Beam(V(s * (hw - .06f), .98f, .7f), V(s * (hw - .1f), 1.32f, .48f), .05f, Vector3.up);
+            black.Beam(V(-(hw - .1f), 1.32f, .48f), V(hw - .1f, 1.32f, .48f), .05f, Vector3.up);
+
+            // Radlaeufe, Reifen, Alufelgen
+            foreach (float z in new[] { 1.08f, -1.05f })
+                foreach (float s in new[] { -1f, 1f })
+                {
+                    black.Box(V(s * (hw + .02f), .66f, z), Q, V(.05f, .08f, .78f));
+                    black.Loft(new[] { V(s * (hw - .2f), .33f, z), V(s * (hw + .02f), .33f, z) }, new[] { R(.3f, .3f), R(.3f, .3f) }, 1, 18, true, true, Vector3.forward);
+                    chrome.Loft(new[] { V(s * (hw + .02f), .33f, z), V(s * (hw + .035f), .33f, z) }, new[] { R(.19f, .19f), R(.19f, .19f) }, 1, 14, true, true, Vector3.forward);
+                    for (int k = 0; k < 4; k++)
+                    {
+                        float a = k * Mathf.PI / 2 + .4f;
+                        black.Box(V(s * (hw + .04f), .33f + Mathf.Sin(a) * .1f, z + Mathf.Cos(a) * .1f), Q, V(.01f, .05f, .05f));
+                    }
+                }
+
+            // Innenraum: zwei Sitzreihen mit Sportsitzen, Kopfstuetzen, Schossbuegel, Armaturenbrett
+            pad.Box(V(0, .64f, .62f), Q, V(W - .2f, .26f, .18f));                                            // Armaturenbrett
+            foreach (float z in new[] { .1f, -.85f })
+                foreach (float s in new[] { -.36f, .36f })
+                {
+                    pad.Box(V(s, .58f, z), Q, V(.56f, .2f, .58f));
+                    pad.Box(V(s, .95f, z - .32f), Quaternion.Euler(-12, 0, 0), V(.56f, .66f, .14f));
+                    pad.Box(V(s, 1.38f, z - .38f), Q, V(.32f, .2f, .12f));
+                    red.Box(V(s, .95f, z - .24f), Quaternion.Euler(-12, 0, 0), V(.14f, .5f, .02f));           // roter Sitzstreifen
+                    chrome.Beam(V(s - .2f, .9f, z + .32f), V(s + .2f, .9f, z + .32f), .05f, Vector3.up);       // Schossbuegel
+                    chrome.Beam(V(s - .2f, .9f, z + .32f), V(s - .22f, .62f, z + .12f), .04f, Vector3.up);
+                    chrome.Beam(V(s + .2f, .9f, z + .32f), V(s + .22f, .62f, z + .12f), .04f, Vector3.up);
+                }
+            black.Loft(new[] { V(-.36f, .85f, .5f), V(-.36f, .9f, .45f) }, new[] { R(.16f, .16f), R(.16f, .16f) }, 1, 14, true, true, Vector3.up);   // Lenkrad
+
+            // Fahrgestell zur Schiene
+            black.Box(V(0, .22f, 0), Q, V(.9f, .16f, 2.4f));
+
+            var paint = Lit(index % 2 == 0 ? new Color(.95f, .72f, .05f) : new Color(.78f, .06f, .06f), .86f, .25f);
+            body.ToObject("Karosserie", paint, car);
+            black.ToObject("Kunststoff", Lit(new Color(.05f, .05f, .055f), .35f, 0), car);
+            chrome.ToObject("Alu", Lit(new Color(.82f, .83f, .85f), .85f, .95f), car);
+            pad.ToObject("Sitze", Lit(new Color(.12f, .12f, .13f), .3f, 0), car);
+            glassL.ToObject("Scheinwerfer", Lit(new Color(1f, .98f, .9f), .97f, .2f), car);
+            red.ToObject("Rot", Lit(new Color(.8f, .05f, .04f), .8f, 0), car);
+            amber.ToObject("Blinker", Lit(new Color(1f, .55f, .05f), .85f, 0), car);
+            stripe.ToObject("Streifen", Lit(new Color(.06f, .06f, .06f), .5f, 0), car);
             return car;
         }
     }

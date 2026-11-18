@@ -27,6 +27,18 @@ namespace Achterbahn
             t.Add(i); t.Add(i + 1); t.Add(i + 2); t.Add(i); t.Add(i + 2); t.Add(i + 3);
         }
 
+        /// <summary>Einzelnes Dreieck, Vorderseite zeigt in Richtung 'outward'.</summary>
+        public void Tri(Vector3 a, Vector3 b, Vector3 c, Vector3 outward)
+        {
+            Vector3 g = Vector3.Cross(b - a, c - a);
+            if (Vector3.Dot(g, outward) < 0) { var x = b; b = c; c = x; g = -g; }
+            g.Normalize();
+            int i = v.Count;
+            v.Add(a); v.Add(b); v.Add(c); n.Add(g); n.Add(g); n.Add(g);
+            uv.Add(new Vector2(a.x, a.z) / tile); uv.Add(new Vector2(b.x, b.z) / tile); uv.Add(new Vector2(c.x, c.z) / tile);
+            t.Add(i); t.Add(i + 1); t.Add(i + 2);
+        }
+
         /// <summary>Quader mit Mittelpunkt, Drehung und Groesse (x Breite, y Hoehe, z Laenge).</summary>
         public void Box(Vector3 c, Quaternion q, Vector3 s)
         {
