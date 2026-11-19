@@ -57,8 +57,40 @@ namespace Achterbahn
             SetState(State.Menu);
             // Im Editor nur nach ausdruecklicher Freigabe (Menue "Achterbahn/Sitz im Editor verbinden"),
             // damit Test- und Entwicklungsfahrten nie unbemerkt den echten Sitz bewegen.
-            if (!Application.isEditor || EditorSeatAllowed) bridge.Start();
+            if (NoSeatArg) Debug.Log("Achterbahn: Start mit -ohnesitz, keine Verbindung zur Bruecke.");
+            else if (!Application.isEditor || EditorSeatAllowed) bridge.Start();
             else Debug.Log("Achterbahn: Sitz-Verbindung im Editor gesperrt.");
+            if (NoSeatArg) StartCoroutine(TestRun());
+        }
+
+        // Testlauf ohne Sitz (nur zusammen mit -ohnesitz): -bahn N, -fahrt, -bilder <Ordner> (Bildschirmfotos, danach Ende)
+        System.Collections.IEnumerator TestRun()
+        {
+            var args = Environment.GetCommandLineArgs();
+            string Arg(string n) { for (int i = 0; i < args.Length - 1; i++) if (string.Equals(args[i].TrimStart('-', '/'), n, StringComparison.OrdinalIgnoreCase)) return args[i + 1]; return null; }
+            bool Has(string n) { foreach (var a in args) if (string.Equals(a.TrimStart('-', '/'), n, StringComparison.OrdinalIgnoreCase)) return true; return false; }
+            if (int.TryParse(Arg("bahn"), out int b) && b >= 1 && b <= defs.Length) Load(b - 1);
+            yield return new WaitForSeconds(3f);
+            if (Has("fahrt")) StartRide();
+            string dir = Arg("bilder");
+            if (string.IsNullOrEmpty(dir)) yield break;
+            System.IO.Directory.CreateDirectory(dir);
+            for (int i = 1; i <= 8; i++)
+            {
+                yield return new WaitForSeconds(5f);
+                ScreenCapture.CaptureScreenshot(System.IO.Path.Combine(dir, "bild" + i + ".png"));
+                Debug.Log($"Testbild {i}: {1f / Time.smoothDeltaTime:0} FPS, {Screen.width}x{Screen.height}");
+            }
+            yield return new WaitForSeconds(1f);
+            Application.Quit();
+        }
+
+        public static float RideSpeed; public static bool OnLift, Riding, Onboard;
+
+        /// <summary>Startschalter "-ohnesitz": EXE verbindet sich nie mit der Bruecke (fuer Tests ohne Sitz).</summary>
+        static bool NoSeatArg
+        {
+            get { foreach (var a in Environment.GetCommandLineArgs()) if (string.Equals(a.TrimStart('-', '/'), "ohnesitz", StringComparison.OrdinalIgnoreCase)) return true; return false; }
         }
 
         public static bool EditorSeatAllowed
@@ -111,8 +143,10 @@ namespace Achterbahn
             if (world != null) Destroy(world.root);
             cur = Prepare(i);
             cues.wild = cur.def.rough;
+            Look.Apply(cam, sun, cur.def);   // vor dem Bau, damit die Spiegelung schon den richtigen Himmel sieht
             world = WorldBuilder.Build(cur.def, cur.track);
-            Look.Apply(cam, sun, cur.def);
+            if (cam.GetComponent<AudioListener>() == null) cam.gameObject.AddComponent<AudioListener>();
+            if (cam.GetComponent<RideAudio>() == null) cam.gameObject.AddComponent<RideAudio>();
             cur.ride.Reset(); haveSeat = false; PlaceTrain();
         }
 
@@ -154,6 +188,9 @@ namespace Achterbahn
             Physics(dt);
             PlaceTrain();
             UpdateCamera((float)dt);
+            // Nur lesend fuer Fahrgeraeusche (RideAudio); beeinflusst weder Physik noch Sitz
+            RideSpeed = (float)cur.ride.v; OnLift = state == State.Ride && cur.ride.seg != null && cur.ride.seg.lift;
+            Riding = state == State.Ride; Onboard = view <= 1 && (state == State.Ride || state == State.Count || state == State.Paused);
             double now = Time.realtimeSinceStartupAsDouble * 1000;
             if (now - lastSend >= 8) { SendFrame(state == State.Ride, now); lastSend = now; }
         }

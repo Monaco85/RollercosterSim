@@ -17,6 +17,12 @@ namespace Achterbahn
         public Material water, leaves;
         public GameObject[] conifers, broadleaf, shrubs, rocks, props;
         public GameObject castleDoor, lantern;
+        // Rummel in der Daemmerung
+        public Material duskSky;
+        public Material asphalt, canvas, paintedWood, corrugated, lacquer;   // ambientCG (CC0)
+        public Material bulb, halo, beam, neon, spark, crowd;               // eigene Shader
+        public GameObject[] people;                                         // Quaternius (CC0), mit Animationen
+        public AudioClip fairAmbience, organ, carouselMusic, chainLift, screams, bumperCars, fireworks, bangBig, bang, coasterPass;
 
         static ThemeAssets cached; static bool tried;
         public static ThemeAssets Get()

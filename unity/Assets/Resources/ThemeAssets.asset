@@ -54,3 +54,39 @@ MonoBehaviour:
   - {fileID: 919132149155446097, guid: 2736eb1f7ccb24b4f9909a3535dea085, type: 3}
   castleDoor: {fileID: 919132149155446097, guid: e5fb916cba772fd48b8b9a99ee46c912, type: 3}
   lantern: {fileID: 919132149155446097, guid: 0200d472eeb01bc4c980974827e10899, type: 3}
+  duskSky: {fileID: 2100000, guid: 2ea507fc35b80a046a4bbff3a82b557d, type: 2}
+  asphalt: {fileID: 2100000, guid: 6a4afac29c890594b87114bb0d827cd1, type: 2}
+  canvas: {fileID: 2100000, guid: 533789ac80b766947a7f8fda2d372091, type: 2}
+  paintedWood: {fileID: 2100000, guid: 3698f3505c56e2d459608dcdd21ef67e, type: 2}
+  corrugated: {fileID: 2100000, guid: 6755d31c358d7b54c81f105fb1c4affb, type: 2}
+  lacquer: {fileID: 2100000, guid: 88dac4cdf995b434e8033be55734d41b, type: 2}
+  bulb: {fileID: 2100000, guid: a25f44cefd420e148a9c445a8e56eefb, type: 2}
+  halo: {fileID: 2100000, guid: 463519b596c226a4e821b3fa2d10ad5f, type: 2}
+  beam: {fileID: 2100000, guid: 2d9c3d6f5d8d9674186e46d056563601, type: 2}
+  neon: {fileID: 2100000, guid: e94171fe31115b54597d80130bdc8c2e, type: 2}
+  spark: {fileID: 2100000, guid: 9179a4f5232948a41a6ee0c547f623d8, type: 2}
+  crowd: {fileID: 2100000, guid: 1aaeef80fc9862d48906bf38e40216c8, type: 2}
+  people:
+  - {fileID: 2242888416370347441, guid: 47a1a2604af0a17409d53d4964f8708b, type: 3}
+  - {fileID: 2242888416370347441, guid: 825775e7d1965964385d364168802aaa, type: 3}
+  - {fileID: 2242888416370347441, guid: 6dd3c6bc1f34a0a45b1fa64ec67b1d5a, type: 3}
+  - {fileID: 2242888416370347441, guid: e39cbd4f9a427da43912511e6dc07bc2, type: 3}
+  - {fileID: 2242888416370347441, guid: 7137ba204f3b28a449cfebf81af66742, type: 3}
+  - {fileID: 2242888416370347441, guid: aa23a5bb5dea18d4eb6af9e2dcf3a944, type: 3}
+  - {fileID: 2242888416370347441, guid: e435be30ddbc39145b7e0c045ab37309, type: 3}
+  - {fileID: 2242888416370347441, guid: e43e71c9813589b44a5c5f8ad234e001, type: 3}
+  - {fileID: 2242888416370347441, guid: ce6a9197d123b7441915733590c03b2d, type: 3}
+  - {fileID: 2242888416370347441, guid: 31183bb9502980349abef3d6b7bf01f0, type: 3}
+  - {fileID: 2242888416370347441, guid: 2b501c732f4bfa446a334d40c0e84084, type: 3}
+  - {fileID: 2242888416370347441, guid: 246eb793fecb8f049ac186c191617232, type: 3}
+  - {fileID: 2242888416370347441, guid: d2c4deacca9012a4bbc596dacd45e057, type: 3}
+  fairAmbience: {fileID: 8300000, guid: 7159df15f5d960e4ab29cda5b07e7bb2, type: 3}
+  organ: {fileID: 8300000, guid: 3f36225e141ea6941b762c7351f24383, type: 3}
+  carouselMusic: {fileID: 8300000, guid: 163cda328e7d112479e82ddae93dcf8a, type: 3}
+  chainLift: {fileID: 8300000, guid: bad0b6b76356a0248a4023fdeb26ed3d, type: 3}
+  screams: {fileID: 8300000, guid: c0bcd7d77c4564841bdf97f03ed3a468, type: 3}
+  bumperCars: {fileID: 8300000, guid: c3c45270fa2e37c44b59a927e553eb66, type: 3}
+  fireworks: {fileID: 8300000, guid: 5b6c7be4704d4674b90b98bfc19110fa, type: 3}
+  bangBig: {fileID: 8300000, guid: 0cc631f1d22b15c468eacbca32a1a9f9, type: 3}
+  bang: {fileID: 8300000, guid: 00010acd71c4657498a266f19fe56ecf, type: 3}
+  coasterPass: {fileID: 8300000, guid: c9c0c68f996f0e64b90422e1877058fb, type: 3}

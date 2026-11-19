@@ -8,8 +8,27 @@ namespace Achterbahn.EditorTools
     /// <summary>Import-Einstellungen fuer Poly-Haven-Dateien und Aufbau von Resources/ThemeAssets.asset.</summary>
     public class PolyHavenImport : AssetPostprocessor
     {
+        void OnPreprocessAudio()
+        {
+            if (!assetPath.Contains("/Audio/")) return;
+            var ai = (AudioImporter)assetImporter;
+            var s = ai.defaultSampleSettings;
+            bool longClip = assetPath.Contains("rummel_nacht") || assetPath.Contains("drehorgel") || assetPath.Contains("autoscooter") || assetPath.Contains("feuerwerk");
+            s.loadType = longClip ? AudioClipLoadType.Streaming : AudioClipLoadType.CompressedInMemory;
+            s.compressionFormat = AudioCompressionFormat.Vorbis; s.quality = .6f;
+            ai.defaultSampleSettings = s; ai.loadInBackground = true;
+        }
+
         void OnPreprocessTexture()
         {
+            if (assetPath.Contains("/AmbientCG/"))
+            {
+                var t = (TextureImporter)assetImporter;
+                if (assetPath.Contains("_NormalGL")) t.textureType = TextureImporterType.NormalMap;
+                if (!assetPath.Contains("_Color")) t.sRGBTexture = assetPath.Contains("_NormalGL") ? t.sRGBTexture : false;
+                t.maxTextureSize = 2048;
+                return;
+            }
             if (!assetPath.Contains("/PolyHaven/")) return;
             var ti = (TextureImporter)assetImporter;
             string f = Path.GetFileName(assetPath).ToLowerInvariant();
@@ -95,20 +114,125 @@ namespace Achterbahn.EditorTools
             ta.props = Models("wooden_barrels_01", "wooden_crate_01");
             ta.castleDoor = Models("large_castle_door").FirstOrDefault();
             ta.lantern = Models("wooden_lantern_01").FirstOrDefault();
+            FairSetup(ta);
             EditorUtility.SetDirty(ta);
             AssetDatabase.SaveAssets();
             Debug.Log("Achterbahn: ThemeAssets eingerichtet (" + ta.conifers.Length + " Nadelbaeume, " + ta.broadleaf.Length + " Laubbaeume)");
         }
 
-        static Material SkyMat()
+        // ---------------- Rummel: Daemmerung, ambientCG, Lichter, Menschen, Geraeusche ----------------
+        static void FairSetup(ThemeAssets ta)
         {
-            string hdr = Directory.GetFiles(Root + "/HDRI", "*.hdr").FirstOrDefault();
+            ta.duskSky = SkyMat("qwantani_dusk_2_puresky", "sky_dusk", .4f, 205f);
+            ta.asphalt = AcgMat("Asphalt031", .55f, 1f);
+            ta.canvas = AcgMat("Fabric066", .35f, 1f);
+            ta.paintedWood = AcgMat("PaintedWood009C", .6f, 1f);
+            ta.corrugated = AcgMat("CorrugatedSteel005", .8f, 1f);
+            ta.lacquer = AcgMat("Plastic010", .95f, .6f);
+            ta.bulb = ShaderMat("bulb", "Achterbahn/Bulb", null);
+            ta.halo = ShaderMat("bulb_halo", "Achterbahn/BulbHalo", null);
+            ta.beam = ShaderMat("light_beam", "Achterbahn/LightBeam", null);
+            ta.neon = ShaderMat("neon_text", "Achterbahn/NeonText", null);
+            ta.spark = ShaderMat("spark", "Achterbahn/Additive", SparkTexture());
+            ta.crowd = ShaderMat("crowd", "Achterbahn/Crowd", null);
+            ta.people = Directory.GetFiles("Assets/Quaternius/People", "*.glb").OrderBy(f => f)
+                .Select(f => AssetDatabase.LoadAssetAtPath<GameObject>(f.Replace('\\', '/'))).Where(g => g != null).ToArray();
+            AudioClip A(string n) => AssetDatabase.LoadAssetAtPath<AudioClip>("Assets/Audio/" + n + ".mp3");
+            ta.fairAmbience = A("rummel_nacht"); ta.organ = A("drehorgel"); ta.carouselMusic = A("karussell_musik");
+            ta.chainLift = A("kettenlift"); ta.screams = A("schreie"); ta.bumperCars = A("autoscooter");
+            ta.fireworks = A("feuerwerk"); ta.bangBig = A("knall_gross"); ta.bang = A("knall"); ta.coasterPass = A("achterbahn_vorbei");
+        }
+
+        static Material ShaderMat(string name, string shader, Texture tex)
+        {
+            string p = Root + "/Materials/" + name + ".mat";
+            var sh = Shader.Find(shader);
+            if (sh == null) { Debug.LogWarning("Shader fehlt: " + shader); return null; }
+            var m = AssetDatabase.LoadAssetAtPath<Material>(p);
+            if (m == null) { m = new Material(sh); AssetDatabase.CreateAsset(m, p); }
+            m.shader = sh;
+            if (tex != null) m.SetTexture("_MainTex", tex);
+            EditorUtility.SetDirty(m);
+            return m;
+        }
+
+        // ambientCG-Material: Farbe, Normalen und Glaette (aus Rauheit, ggf. Metall) in eine Maske gepackt
+        static Material AcgMat(string id, float smooth, float bump)
+        {
+            string dir = "Assets/AmbientCG/" + id, pre = $"{dir}/{id}_2K-JPG_";
+            var dif = AssetDatabase.LoadAssetAtPath<Texture2D>(pre + "Color.jpg");
+            if (dif == null) { Debug.LogWarning("Textur fehlt: " + id); return null; }
+            var nor = AssetDatabase.LoadAssetAtPath<Texture2D>(pre + "NormalGL.jpg");
+            string mask = "Assets/Generated/" + id + "_mask.png";
+            if (!File.Exists(mask) && File.Exists(pre + "Roughness.jpg"))
+            {
+                Directory.CreateDirectory("Assets/Generated");
+                var r = new Texture2D(2, 2); r.LoadImage(File.ReadAllBytes(pre + "Roughness.jpg"));
+                Texture2D met = null; if (File.Exists(pre + "Metalness.jpg")) { met = new Texture2D(2, 2); met.LoadImage(File.ReadAllBytes(pre + "Metalness.jpg")); }
+                Texture2D ao = null; if (File.Exists(pre + "AmbientOcclusion.jpg")) { ao = new Texture2D(2, 2); ao.LoadImage(File.ReadAllBytes(pre + "AmbientOcclusion.jpg")); }
+                int w = r.width / 2, h = r.height / 2;   // 1K reicht fuer die Maske
+                var o = new Texture2D(w, h, TextureFormat.RGBA32, false, true);
+                var px = new Color[w * h];
+                for (int y = 0; y < h; y++) for (int x = 0; x < w; x++)
+                {
+                    float u = (x + .5f) / w, v = (y + .5f) / h;
+                    float rough = r.GetPixelBilinear(u, v).r;
+                    px[y * w + x] = new Color(met != null ? met.GetPixelBilinear(u, v).r : 0f, ao != null ? ao.GetPixelBilinear(u, v).r : 1f, 0, 1f - rough);
+                }
+                o.SetPixels(px); o.Apply();
+                File.WriteAllBytes(mask, o.EncodeToPNG());
+                AssetDatabase.ImportAsset(mask);
+                var ti = (TextureImporter)AssetImporter.GetAtPath(mask); ti.sRGBTexture = false; ti.SaveAndReimport();
+            }
+            string p = Root + "/Materials/acg_" + id + ".mat";
+            var m = AssetDatabase.LoadAssetAtPath<Material>(p);
+            if (m == null) { m = new Material(Shader.Find("Universal Render Pipeline/Lit")); AssetDatabase.CreateAsset(m, p); }
+            m.SetTexture("_BaseMap", dif); m.SetColor("_BaseColor", Color.white);
+            if (nor != null) { m.SetTexture("_BumpMap", nor); m.SetFloat("_BumpScale", bump); m.EnableKeyword("_NORMALMAP"); }
+            var mt = AssetDatabase.LoadAssetAtPath<Texture2D>(mask);
+            if (mt != null)
+            {
+                m.SetTexture("_MetallicGlossMap", mt); m.EnableKeyword("_METALLICSPECGLOSSMAP");
+                m.SetTexture("_OcclusionMap", mt); m.EnableKeyword("_OCCLUSIONMAP"); m.SetFloat("_OcclusionStrength", .8f);
+                m.SetFloat("_SmoothnessTextureChannel", 0);
+            }
+            m.SetFloat("_Smoothness", smooth); m.SetFloat("_Metallic", 0);
+            m.enableInstancing = true;
+            EditorUtility.SetDirty(m);
+            return m;
+        }
+
+        // Weicher runder Leuchtpunkt fuer Funken und Feuerwerk
+        static Texture2D SparkTexture()
+        {
+            const string path = "Assets/Generated/spark.png";
+            if (!File.Exists(path))
+            {
+                Directory.CreateDirectory("Assets/Generated");
+                const int S = 64; var t = new Texture2D(S, S, TextureFormat.RGBA32, false);
+                for (int y = 0; y < S; y++) for (int x = 0; x < S; x++)
+                {
+                    float dx = (x + .5f) / S * 2 - 1, dy = (y + .5f) / S * 2 - 1, r2 = dx * dx + dy * dy;
+                    float a = Mathf.Clamp01(Mathf.Exp(-r2 * 5f) * (1 - r2) + Mathf.Exp(-r2 * 40f));
+                    t.SetPixel(x, y, new Color(1, 1, 1, Mathf.Clamp01(a)));
+                }
+                t.Apply(); File.WriteAllBytes(path, t.EncodeToPNG()); AssetDatabase.ImportAsset(path);
+                var ti = (TextureImporter)AssetImporter.GetAtPath(path); ti.alphaIsTransparency = true; ti.wrapMode = TextureWrapMode.Clamp; ti.SaveAndReimport();
+            }
+            return AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+        }
+
+        static Material SkyMat() => SkyMat("kloofendal_48d_partly_cloudy_puresky", "sky", 1f, 0f);
+
+        static Material SkyMat(string hdrName, string matName, float exposure, float rotation)
+        {
+            string hdr = Directory.GetFiles(Root + "/HDRI", hdrName + "*.hdr").FirstOrDefault();
             if (hdr == null) return null;
-            string p = Root + "/Materials/sky.mat";
+            string p = Root + "/Materials/" + matName + ".mat";
             var m = AssetDatabase.LoadAssetAtPath<Material>(p);
             if (m == null) { m = new Material(Shader.Find("Skybox/Panoramic")); AssetDatabase.CreateAsset(m, p); }
             m.SetTexture("_MainTex", AssetDatabase.LoadAssetAtPath<Texture>(hdr.Replace('\\', '/')));
-            m.SetFloat("_Mapping", 1); m.SetFloat("_ImageType", 0); m.SetFloat("_Exposure", 1f); m.SetFloat("_Rotation", 0);
+            m.SetFloat("_Mapping", 1); m.SetFloat("_ImageType", 0); m.SetFloat("_Exposure", exposure); m.SetFloat("_Rotation", rotation);
             EditorUtility.SetDirty(m);
             return m;
         }

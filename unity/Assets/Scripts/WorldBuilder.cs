@@ -119,6 +119,7 @@ namespace Achterbahn
             // Zug
             w.cars = new Transform[def.trainCars];
             for (int i = 0; i < w.cars.Length; i++) w.cars[i] = TrainBuilder.Car(def, i, root, ta);
+            FairWorld.car = def.theme == "rummel" && w.cars.Length > 0 ? w.cars[0] : null;
 
             // Spiegelungen von Himmel und Umgebung (einmal gerendert)
             var probeGo = new GameObject("Spiegelung"); probeGo.transform.SetParent(root, false);

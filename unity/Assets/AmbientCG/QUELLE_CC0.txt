@@ -1,0 +1,2 @@
+﻿Alle Dateien in diesem Ordner stammen von ambientCG (https://ambientcg.com) und stehen unter CC0 (gemeinfrei).
+Asphalt031 (Festplatz), Fabric066 (Markisen und Planen), PaintedWood009C (Budenwaende), CorrugatedSteel005 (Wellblech), Plastic010 (Lack der Fahrgeschaefte)

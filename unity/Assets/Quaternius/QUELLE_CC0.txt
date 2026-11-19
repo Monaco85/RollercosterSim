@@ -1,0 +1,9 @@
+Menschen fuer den Rummel: Quaternius (https://quaternius.com), CC0 (gemeinfrei, keine Namensnennung noetig).
+Pakete "Ultimate Modular Men/Women" und "Animated Men/Women", heruntergeladen ueber poly.pizza (Lizenz dort: CC0).
+Nur Modelle mit CC0-Kennzeichnung auf poly.pizza wurden uebernommen.
+
+Adventurer_5EGWBMpuXq, Adventurer_ZwF0K7WBmu, Animated_Woman_nIItLV9nxS, Animated_Woman_qJ2gsTUBHL, Beach_Character_DojKLcO34E,
+Business_Man_JFrLIKqvCH, Casual_Character_kZ3DmIoGip, Farmer_7pn3R6hPvE, Hooded_Adventurer_y9KWOVG21R, Hoodie_Character_gKLBoRsyKe,
+Punk_BTALZymknF, Punk_djXoqejw6w, Worker_Yg2bQZO6Hj   (Kuerzel = poly.pizza-Kennung, Seite https://poly.pizza/m/<Kennung>)
+
+Im Spiel werden die Animationen beim Laden in eine Knochen-Textur gebacken (Scripts/Crowd.cs, Shaders/Crowd.shader).
