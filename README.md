@@ -15,6 +15,24 @@ Ein Achterbahn-Simulator für den selbstgebauten 2DOF-Rennsitz. Das Spiel läuft
 
 Die Seite gibt es auch als Artefakt auf claude.ai: [Achterbahn am Rennsitz](https://claude.ai/artifact/2yPbzCeWDJYeczUadGeAPE). Der Link ist privat und öffnet sich nur für den Besitzer. Dort läuft das Spiel als reine Vorschau ohne Sitz. Den Sitz bewegt nur die EXE aus diesem Repository.
 
+## Unity-Fassung
+
+Im Ordner [`unity/`](unity/) liegt eine zweite, realistische Fassung des Spiels als Unity-6-Projekt (URP). Physik, Bewegungswerte und das Paketformat für SimHub sind dieselben wie im HTML-Spiel. Sie hat sechs Bahnen mit eigener Welt und eigener Musik:
+
+| | |
+|---|---|
+| ![Wilde Maus auf dem Rummel](docs/clips/unity-wilde-maus.gif) | ![Rummel in der Dämmerung](docs/clips/unity-rummel.gif) |
+| **Wilde Maus.** Einzelwagen mit Lauflichtern an der Schiene. | **Rummel in der Dämmerung.** Riesenrad, Karussell, Freifallturm, 45 Buden, Feuerwerk und rund 370 animierte Besucher. |
+| ![Dino-Looping](docs/clips/unity-dino-looping.gif) | ![Ritterburg](docs/clips/unity-ritterburg.gif) |
+| **Dino-Looping.** Urwald mit See und Dinosauriern. | **Ritterburg.** Holzbahn durch Burgtor, Dorf und um den Bergfried. |
+
+- **Öffnen:** Den Ordner `unity` im Unity Hub hinzufügen (Unity 6000.0.85f2). Beim ersten Öffnen lädt Unity die Pakete selbst.
+- **Bauen:** Im Editor über das Menü **Achterbahn > Programm bauen**. Es entsteht `unity/Build/Achterbahn.exe`.
+- **Mit Sitz fahren:** Zuerst `Bruecke fuer Unity starten.bat` neben der Brücken-EXE starten (Brücke ohne Edge-Fenster, liegt in `bridge/` und kommt mit dem nächsten Release ins ZIP), dann die Unity-EXE. Nie gleichzeitig das HTML-Spiel offen haben.
+- **Testen ohne Sitz:** `Achterbahn.exe -ohnesitz` verbindet sich nie mit der Brücke. Im Editor ist der Sitz ohnehin gesperrt, bis man ihn über **Achterbahn > Sitz im Editor verbinden** freigibt.
+
+Weitere Hinweise stehen in [`unity/README.md`](unity/README.md). Herkunft und Lizenzen der Grafik, Figuren und Töne stehen in [DRITTANBIETER.md](DRITTANBIETER.md).
+
 ## Die vier Bahnen
 
 | Bahn | Für wen | Was passiert |
@@ -123,7 +141,8 @@ Pitch und Roll sind schon fertig gemischt. Der Sitz kippt am Lifthügel nach hin
 |---|---|
 | `bridge/` | Windows-Programm in Go. `index.html` ist die fertige Spielseite. Sie kommt als `spiel.html` ins Release und steckt zusätzlich als Ersatz in der EXE. |
 | `web-quelltext/` | Lesbarer Quelltext der Spielseite, Stand 2.11.2026 |
-| `docs/bilder/` | Vorschaubilder für diese Seite |
+| `unity/` | Unity-6-Fassung des Spiels (Projektordner: `Assets`, `Packages`, `ProjectSettings`) |
+| `docs/bilder/`, `docs/clips/` | Vorschaubilder und Unity-Clips für diese Seite |
 | `.github/workflows/` | Baut bei jedem Push die EXE. Mit einer Version beim manuellen Start entsteht ein Release. |
 
 **Achtung:** `bridge/index.html` ist neuer als `web-quelltext/`. Kulisse, Kuppen-Fix und das neue Bewegungsmodell wurden direkt in der fertigen Seite geändert. Wer neu aus `web-quelltext/` baut, verliert diese Änderungen.
