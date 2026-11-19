@@ -99,7 +99,8 @@ namespace Achterbahn
             if (b != a) { ep.startColor = b; ps.Emit(ep, 100); }
             var l = flashes[fi++ % flashes.Count]; l.transform.position = p; l.color = Color.Lerp(a, Color.white, .3f); l.intensity = 9f;
             var cam = Camera.main; float delay = cam != null ? Vector3.Distance(cam.transform.position, p) / 340f : 0;
-            FairSound.PlayAt(Random.value < .35f && bangBig != null ? bangBig : bang, p, 1f, 60, 900, delay, Random.Range(.85f, 1.1f));
+            // gedaempft: leiser, faellt mit der Entfernung ab, grosser Knall nur selten
+            FairSound.PlayAt(Random.value < .15f && bangBig != null ? bangBig : bang, p, .28f, 40, 700, delay, Random.Range(.8f, 1.0f), true);
         }
     }
 
@@ -167,12 +168,13 @@ namespace Achterbahn
             s.Play();
             return s;
         }
-        public static void PlayAt(AudioClip clip, Vector3 pos, float vol, float minD, float maxD, float delay, float pitch = 1)
+        public static void PlayAt(AudioClip clip, Vector3 pos, float vol, float minD, float maxD, float delay, float pitch = 1, bool muffled = false)
         {
             if (clip == null) return;
             var go = new GameObject("Knall"); go.transform.position = pos;
             var s = go.AddComponent<AudioSource>(); s.clip = clip; s.volume = vol; s.spatialBlend = 1; s.minDistance = minD; s.maxDistance = maxD;
-            s.rolloffMode = AudioRolloffMode.Linear; s.dopplerLevel = 0; s.pitch = pitch;
+            s.rolloffMode = AudioRolloffMode.Logarithmic; s.dopplerLevel = 0; s.pitch = pitch;
+            if (muffled) go.AddComponent<AudioLowPassFilter>().cutoffFrequency = 2500;   // ferner Knall: weniger scharf
             s.PlayDelayed(delay);
             Object.Destroy(go, delay + clip.length / Mathf.Max(.1f, pitch) + .2f);
         }
