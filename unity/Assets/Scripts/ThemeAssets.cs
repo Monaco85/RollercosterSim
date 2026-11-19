@@ -23,6 +23,8 @@ namespace Achterbahn
         public Material bulb, halo, beam, neon, spark, crowd;               // eigene Shader
         public GameObject[] people;                                         // Quaternius (CC0), mit Animationen
         public AudioClip fairAmbience, organ, carouselMusic, chainLift, screams, bumperCars, fireworks, bangBig, bang, coasterPass;
+        // Hintergrundmusik je Bahn (freesound.org, CC0)
+        public AudioClip musicRaupe, musicBerg, musicDino, musicMonster, musicBurg;
 
         static ThemeAssets cached; static bool tried;
         public static ThemeAssets Get()

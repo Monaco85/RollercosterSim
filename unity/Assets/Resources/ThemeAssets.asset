@@ -90,3 +90,8 @@ MonoBehaviour:
   bangBig: {fileID: 8300000, guid: 0cc631f1d22b15c468eacbca32a1a9f9, type: 3}
   bang: {fileID: 8300000, guid: 00010acd71c4657498a266f19fe56ecf, type: 3}
   coasterPass: {fileID: 8300000, guid: c9c0c68f996f0e64b90422e1877058fb, type: 3}
+  musicRaupe: {fileID: 8300000, guid: f78cc37cbd63f5248870b99674966586, type: 3}
+  musicBerg: {fileID: 8300000, guid: 02a246dad4c6d7c47938d0f2c250ba09, type: 3}
+  musicDino: {fileID: 8300000, guid: 1657bc6f8ee4c07418b67519ac81169c, type: 3}
+  musicMonster: {fileID: 8300000, guid: 1a5bdfd332dd13c46ac9e0a3f32fec0d, type: 3}
+  musicBurg: {fileID: 8300000, guid: 1db00eb71333a954889f2390b27e4400, type: 3}

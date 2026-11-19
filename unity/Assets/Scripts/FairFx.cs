@@ -272,6 +272,32 @@ namespace Achterbahn
         }
     }
 
+    /// <summary>Hintergrundmusik passend zum Motto der Bahn: blendet ein, waehrend der Fahrt etwas leiser.</summary>
+    public class ThemeMusic : MonoBehaviour
+    {
+        public float menuVolume = .38f, rideVolume = .24f; AudioSource src;
+        public static void Add(Transform root, TrackDef def)
+        {
+            var ta = ThemeAssets.Get(); if (ta == null) return;
+            AudioClip clip = def.id switch
+            {
+                "raupe" => ta.musicRaupe, "bergblitz" => ta.musicBerg, "drache" => ta.musicDino,
+                "monster" => ta.musicMonster, "ritterburg" => ta.musicBurg, _ => null,
+            };
+            if (clip == null) return;
+            var go = new GameObject("Musik " + def.name); go.transform.SetParent(root, false);
+            var s = go.AddComponent<AudioSource>(); s.clip = clip; s.loop = true; s.spatialBlend = 0; s.volume = 0; s.playOnAwake = false; s.priority = 64;
+            go.AddComponent<ThemeMusic>().src = s;
+            s.Play();
+        }
+        void Update()
+        {
+            if (src == null) return;
+            float want = GameController.Riding ? rideVolume : menuVolume;
+            src.volume = Mathf.MoveTowards(src.volume, want, Time.unscaledDeltaTime * .25f);
+        }
+    }
+
     /// <summary>
     /// Fahrgeraeusche fuer alle Bahnen: Fahrtwind und Schienenrollen (berechnet, aus Rauschen), Kette am Lift.
     /// Liest nur Anzeige-Werte aus dem GameController, schickt nichts an den Sitz.

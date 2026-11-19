@@ -13,7 +13,7 @@ namespace Achterbahn.EditorTools
             if (!assetPath.Contains("/Audio/")) return;
             var ai = (AudioImporter)assetImporter;
             var s = ai.defaultSampleSettings;
-            bool longClip = assetPath.Contains("rummel_nacht") || assetPath.Contains("drehorgel") || assetPath.Contains("autoscooter") || assetPath.Contains("feuerwerk");
+            bool longClip = assetPath.Contains("rummel_nacht") || assetPath.Contains("drehorgel") || assetPath.Contains("autoscooter") || assetPath.Contains("feuerwerk") || assetPath.Contains("musik_");
             s.loadType = longClip ? AudioClipLoadType.Streaming : AudioClipLoadType.CompressedInMemory;
             s.compressionFormat = AudioCompressionFormat.Vorbis; s.quality = .6f;
             ai.defaultSampleSettings = s; ai.loadInBackground = true;
@@ -140,6 +140,7 @@ namespace Achterbahn.EditorTools
             AudioClip A(string n) => AssetDatabase.LoadAssetAtPath<AudioClip>("Assets/Audio/" + n + ".mp3");
             ta.fairAmbience = A("rummel_nacht"); ta.organ = A("drehorgel"); ta.carouselMusic = A("karussell_musik");
             ta.chainLift = A("kettenlift"); ta.screams = A("schreie"); ta.bumperCars = A("autoscooter");
+            ta.musicRaupe = A("musik_raupe"); ta.musicBerg = A("musik_berg"); ta.musicDino = A("musik_dino"); ta.musicMonster = A("musik_monster"); ta.musicBurg = A("musik_burg");
             ta.fireworks = A("feuerwerk"); ta.bangBig = A("knall_gross"); ta.bang = A("knall"); ta.coasterPass = A("achterbahn_vorbei");
         }
 
