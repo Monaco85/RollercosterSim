@@ -31,7 +31,7 @@ Im Ordner [`unity/`](unity/) liegt eine zweite, realistische Fassung des Spiels 
 - **Mit Sitz fahren:** Zuerst `Bruecke fuer Unity starten.bat` neben der Brücken-EXE starten (Brücke ohne Edge-Fenster, liegt in `bridge/` und kommt mit dem nächsten Release ins ZIP), dann die Unity-EXE. Nie gleichzeitig das HTML-Spiel offen haben.
 - **Testen ohne Sitz:** `Achterbahn.exe -ohnesitz` verbindet sich nie mit der Brücke. Im Editor ist der Sitz ohnehin gesperrt, bis man ihn über **Achterbahn > Sitz im Editor verbinden** freigibt.
 
-Weitere Hinweise stehen in [`unity/README.md`](unity/README.md). Herkunft und Lizenzen der Grafik, Figuren und Töne stehen in [DRITTANBIETER.md](DRITTANBIETER.md).
+Weitere Hinweise stehen in [`unity/README.md`](unity/README.md). Aufbau, Werkzeuge und Projektwissen für die Weiterentwicklung stehen in [docs/UNITY-ENTWICKLUNG.md](docs/UNITY-ENTWICKLUNG.md). Herkunft und Lizenzen der Grafik, Figuren und Töne stehen in [DRITTANBIETER.md](DRITTANBIETER.md).
 
 ## Die vier Bahnen
 
