@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace Achterbahn
@@ -510,7 +510,7 @@ namespace Achterbahn
             {
                 float ang = Random.Range(0f, Mathf.PI * 2), dist = Mathf.Sqrt(Random.value) * radius * 1.9f;
                 Vector2 p = new Vector2(center.x + Mathf.Cos(ang) * dist, center.z + Mathf.Sin(ang) * dist);
-                if (!clr.Free(p, 9f)) continue;
+                if (!clr.Free(p, 9f) || gr.InWater(p.x, p.y)) continue;
                 Fir(bark, twigs, new Vector3(p.x, gr.Height(p.x, p.y) - .15f, p.y), Random.Range(conifersMostly ? 11f : 8f, conifersMostly ? 21f : 15f));
                 gr.forestSpots.Add(new Vector3(p.x, p.y, 4.5f));
                 clr.Block(new Rect(p.x - 2.5f, p.y - 2.5f, 5f, 5f));
@@ -525,7 +525,7 @@ namespace Achterbahn
             {
                 float ang = Random.Range(0f, Mathf.PI * 2), dist = Mathf.Sqrt(Random.value) * radius * 1.6f;
                 Vector2 p = new Vector2(center.x + Mathf.Cos(ang) * dist, center.z + Mathf.Sin(ang) * dist);
-                if (!clr.Free(p, 4f)) continue;
+                if (!clr.Free(p, 4f) || gr.InWater(p.x, p.y)) continue;
                 var set = Random.value < .75f ? ta.shrubs : ta.rocks;
                 if (set == null || set.Length == 0) continue;
                 Place(set[Random.Range(0, set.Length)], parent, new Vector3(p.x, gr.Height(p.x, p.y) - .05f, p.y), Random.Range(0f, 360f), Random.Range(.7f, 1.4f));

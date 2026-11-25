@@ -74,12 +74,21 @@ namespace Achterbahn
             w.center = (mn + mx) * .5f;
             w.radius = Mathf.Max(mx.x - mn.x, mx.z - mn.z) * .5f + 40f;
 
-            var clr = new Scenery.Clearance(track);
-            var gr = new Ground(def, track, w.center, w.radius, root, ta);
-            if (def.theme == "mittelalter")
+            // Autoscooter-Halle (Bahn 9): nur die Halle auf ihrem Asphaltplatz, kein Gelaende, keine Strecke
+            bool scooter = def.theme == "autoscooter" && def.bumper != null;
+            if (scooter && !FairWorld.Scooter(def, root)) { scooter = false; def.theme = "mittelalter"; }   // Prefab fehlt: alte Kulisse
+            var clr = scooter ? null : new Scenery.Clearance(track);
+            var gr = scooter ? null : new Ground(def, track, w.center, w.radius, root, ta);
+            if (scooter)
+            {
+                // Wiese ringsum dunkel (Nacht); die Halle bringt Platz, Licht, Musik und Spiegelung mit
+                gm.SetColor("_BaseColor", new Color(.25f, .3f, .22f));
+            }
+            else if (def.theme == "mittelalter")
             {
                 Scenery.WoodTrack(track, root, ta, p => (Mathf.Abs(p.x - 2) < 24f && Mathf.Abs(p.z) < 4f));
                 CastleBuilder.Build(def, track, root, ta, clr, gr);
+                if (def.bumper != null) FairWorld.Joust(def, root, ta, clr);   // Boxauto-Turnier im Burghof
                 Scenery.Village(def, track, root, ta, clr, gr, w.center, w.radius);
                 Scenery.Nature(root, ta, clr, gr, w.center, w.radius, 220, true);
             }
@@ -100,6 +109,16 @@ namespace Achterbahn
                 FairWorld.Build(def, track, root, ta, clr, gr, w.center, w.radius);
                 Scenery.Nature(root, ta, clr, gr, w.center, w.radius, 160, false);
             }
+            else if (def.theme == "wikinger")
+            {
+                // Mit dem Viking-Village-Asset (Asset-Store-Lizenz, nicht im Repo) das echte Dorf, sonst das prozedurale Ersatzdorf
+                BuildRails(track, def, root);
+                BuildSupports(track, def, root);
+                DinoWorld.Lake(def, root, ta, clr, gr);   // Fjord
+                if (!VikingWorld.Build(def, track, root, ta, clr, gr, w.center, w.radius))
+                    Scenery.Village(def, track, root, ta, clr, gr, w.center, w.radius);
+                Scenery.Nature(root, ta, clr, gr, w.center, w.radius, 220, true);
+            }
             else if (def.theme == "holz")
             {
                 Scenery.WoodTrack(track, root, ta, p => false);
@@ -112,15 +131,18 @@ namespace Achterbahn
                 Scenery.Nature(root, ta, clr, gr, w.center, w.radius, 150, def.id == "bergblitz");
             }
             // Liftkette dort, wo der Plan einen Kettenlift hat
-            foreach (var sgm in def.plan(track)) if (sgm.lift) Scenery.LiftChain(track, sgm.from, sgm.to, root);
-            gr.Paint(def.volcano != null, def.theme == "dino");
-            gr.Grass(root, clr);
+            if (!scooter)
+            {
+                foreach (var sgm in def.plan(track)) if (sgm.lift) Scenery.LiftChain(track, sgm.from, sgm.to, root);
+                gr.Paint(def.volcano != null, def.theme == "dino");
+                gr.Grass(root, clr);
+            }
 
-            // Zug
+            // Zug (in der Autoscooter-Halle unsichtbar, die Strecke dient dort nur der Rechnung)
             w.cars = new Transform[def.trainCars];
-            for (int i = 0; i < w.cars.Length; i++) w.cars[i] = TrainBuilder.Car(def, i, root, ta);
-            FairWorld.car = def.theme == "rummel" && w.cars.Length > 0 ? w.cars[0] : null;
-            ThemeMusic.Add(root, def);   // Rummel hat eigene Musik (Drehorgel, Karussell)
+            for (int i = 0; i < w.cars.Length; i++) { w.cars[i] = TrainBuilder.Car(def, i, root, ta); if (scooter) w.cars[i].gameObject.SetActive(false); }
+            FairWorld.car = def.theme == "rummel" && def.swing == null && w.cars.Length > 0 ? w.cars[0] : null;
+            if (!scooter) ThemeMusic.Add(root, def);   // Rummel und Autoscooter haben eigene Musik
 
             // Spiegelungen von Himmel und Umgebung (einmal gerendert)
             var probeGo = new GameObject("Spiegelung"); probeGo.transform.SetParent(root, false);

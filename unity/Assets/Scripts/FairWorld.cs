@@ -181,7 +181,7 @@ namespace Achterbahn
         public static void Build(TrackDef def, Track tr, Transform parent, ThemeAssets assets, Scenery.Clearance clr, Ground g, Vector3 center, float radius)
         {
             root = parent; ta = assets; paint.Clear(); paintMats.Clear(); lightCount = 0; B = new BulbSet();
-            booths.Clear(); horses.Clear(); wheelSeats.Clear(); swingSeats.Clear(); scooters.Clear(); drop = null; shipPivot = null; shipSwing = null;
+            booths.Clear(); horses.Clear(); wheelSeats.Clear(); swingSeats.Clear(); scooters.Clear(); drop = null; shipPivot = null; shipSwing = null; RideSwing = null;
             CrowdAnim.ReleaseAll();
             Plaza(clr);
             Station(clr);
@@ -190,7 +190,8 @@ namespace Achterbahn
             Carousel(new Vector3(-30, 0, 52));
             WaveSwinger(new Vector3(42, 0, 58));
             DropTower(new Vector3(-62, 0, -58));
-            PirateShip(new Vector3(108, 0, -48));
+            if (def.swing != null) MedievalSwing(new Vector3(108, 0, -48), (float)def.swing.pivot.y, (float)def.swing.arm);
+            else PirateShip(new Vector3(108, 0, -48));
             BumperCars(new Vector3(-66, 0, 8));
             Booths();
             LightStrings();

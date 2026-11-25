@@ -17,3 +17,7 @@
 .mcp.json
 Assets/Resources/PerformanceTestRun*.json
 Assets/Resources/PerformanceTestRun*.json.meta
+
+# Viking Village (Unity Asset Store, Standard-EULA): darf nicht ins oeffentliche Repo
+/Assets/Viking Village/
+/Assets/Viking Village.meta

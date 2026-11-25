@@ -289,7 +289,8 @@ namespace Achterbahn
                     for (int k = 0; k < 5; k++) Scenery.PlaceProp(ta.props[k % ta.props.Length], parent, new Vector3(24.5f + Random.Range(-.5f, .5f), 0, 18 + k * 5f), Random.Range(0, 360));
             }
 
-            // --- Schmiede mit Esse ---
+            // --- Schmiede mit Esse (nicht beim Boxauto, dort steht das Turnierzelt) ---
+            if (def.bumper == null)
             {
                 Vector3 c = new Vector3(19, 0, 15.5f);
                 b.plinth.Box(c + up * .4f, Quaternion.identity, new Vector3(6.4f, .8f, 5.4f));
@@ -303,7 +304,8 @@ namespace Achterbahn
                 b.wood.Box(c + new Vector3(-1.5f, .2f, -3.6f), Quaternion.identity, new Vector3(.5f, .4f, .5f));
             }
 
-            // --- Brunnen im Hof ---
+            // --- Brunnen im Hof (nicht beim Boxauto, dort steht das Turnierzelt) ---
+            if (def.bumper == null)
             {
                 Vector3 c = new Vector3(6, 0, 22);
                 b.plinth.Cylinder(c, 1.1f, .95f, 20, false);

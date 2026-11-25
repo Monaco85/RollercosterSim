@@ -95,3 +95,13 @@ MonoBehaviour:
   musicDino: {fileID: 8300000, guid: 1657bc6f8ee4c07418b67519ac81169c, type: 3}
   musicMonster: {fileID: 8300000, guid: 1a5bdfd332dd13c46ac9e0a3f32fec0d, type: 3}
   musicBurg: {fileID: 8300000, guid: 1db00eb71333a954889f2390b27e4400, type: 3}
+  chandelier: {fileID: -3872803654868886414, guid: fa4f5a8da8c295f42a70f92b5107b7f6, type: 3}
+  kiteShield: {fileID: 8771091787928289351, guid: fca5e42f9f1ddd046a29f55d723cedd5, type: 3}
+  warHammer: {fileID: 8840165333950093862, guid: 2f1fa668cec5b6d40aff13df47caf6f2, type: 3}
+  estoc: {fileID: -9136895414046463847, guid: d25dfcd68bc886e49a497c44030ff109, type: 3}
+  chest: {fileID: 8771091787928289351, guid: 50369acd347095245a9614cd8a0a1b26, type: 3}
+  wineBarrel: {fileID: 8771091787928289351, guid: a57a269dd64d57341add287407203681, type: 3}
+  lionHead: {fileID: -253534354581713708, guid: f099a8cc3529e684d93068ba5235eca8, type: 3}
+  firePit: {fileID: -4214782735267518701, guid: ad4f5509a753da34c9107565534dd148, type: 3}
+  bucket: {fileID: 8771091787928289351, guid: ac2853a95b4951b4d91b7996b72bb8a1, type: 3}
+  cannon: {fileID: 8771091787928289351, guid: 5b7d1a12d2b6a564d816d4b42334f980, type: 3}

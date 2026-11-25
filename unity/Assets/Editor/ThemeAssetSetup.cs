@@ -114,6 +114,9 @@ namespace Achterbahn.EditorTools
             ta.props = Models("wooden_barrels_01", "wooden_crate_01");
             ta.castleDoor = Models("large_castle_door").FirstOrDefault();
             ta.lantern = Models("wooden_lantern_01").FirstOrDefault();
+            ta.chandelier = Gltf("lantern_chandelier_01"); ta.kiteShield = Gltf("kite_shield"); ta.warHammer = Gltf("ornate_war_hammer");
+            ta.estoc = Gltf("antique_estoc"); ta.chest = Gltf("treasure_chest"); ta.wineBarrel = Gltf("wine_barrel_01"); ta.lionHead = Gltf("lion_head");
+            ta.firePit = Gltf("stone_fire_pit"); ta.bucket = Gltf("wooden_bucket_01"); ta.cannon = Gltf("cannon_01");
             FairSetup(ta);
             EditorUtility.SetDirty(ta);
             AssetDatabase.SaveAssets();
@@ -604,6 +607,8 @@ namespace Achterbahn.EditorTools
             var ti = (TextureImporter)AssetImporter.GetAtPath(path); ti.alphaIsTransparency = true; ti.wrapMode = TextureWrapMode.Clamp; ti.SaveAndReimport();
             return path;
         }
+
+        public static GameObject Gltf(string id) => AssetDatabase.LoadAssetAtPath<GameObject>($"{Root}/Models/{id}/{id}.gltf");
 
         static GameObject[] Models(params string[] ids) =>
             ids.Select(id => AssetDatabase.LoadAssetAtPath<GameObject>($"{Root}/Models/{id}/{id}.fbx")).Where(g => g != null).ToArray();

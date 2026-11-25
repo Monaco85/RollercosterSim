@@ -1,0 +1,1 @@
+﻿public static class AgentIsPlay { public static string Main() => "playing=" + UnityEditor.EditorApplication.isPlaying + " gc=" + (UnityEngine.Object.FindFirstObjectByType<Achterbahn.GameController>() != null); }

@@ -282,7 +282,7 @@ namespace Achterbahn
             AudioClip clip = def.id switch
             {
                 "raupe" => ta.musicRaupe, "bergblitz" => ta.musicBerg, "drache" => ta.musicDino,
-                "monster" => ta.musicMonster, "ritterburg" => ta.musicBurg, _ => null,
+                "monster" => ta.musicMonster, "ritterburg" => ta.musicBurg, "wikinger" => ta.musicBurg, "boxauto" => ta.musicBurg, _ => null,
             };
             if (clip == null) return;
             var go = new GameObject("Musik " + def.name); go.transform.SetParent(root, false);

@@ -25,6 +25,8 @@ namespace Achterbahn
         public AudioClip fairAmbience, organ, carouselMusic, chainLift, screams, bumperCars, fireworks, bangBig, bang, coasterPass;
         // Hintergrundmusik je Bahn (freesound.org, CC0)
         public AudioClip musicRaupe, musicBerg, musicDino, musicMonster, musicBurg;
+        // Boxauto im Burghof (Poly Haven, CC0, glTF)
+        public GameObject chandelier, kiteShield, warHammer, estoc, chest, wineBarrel, lionHead, firePit, bucket, cannon;
 
         static ThemeAssets cached; static bool tried;
         public static ThemeAssets Get()

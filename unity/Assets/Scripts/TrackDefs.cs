@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -27,6 +27,21 @@ namespace Achterbahn
         public V2[] flatSpots;                // weitere ebene Flaechen im Gelaende (nur Optik)
         public float[] volcano;               // Vulkan: x, z (Bahn-Koordinaten), Radius, Hoehe (nur Optik)
         public float[] lake;                  // See: x, z (Bahn-Koordinaten), Halbachse x, Halbachse z, Tiefe (nur Optik)
+        public SwingDef swing;                // gesetzt = Schiffsschaukel (eigenes Pendelmodell), die Bahn dient nur als Kulisse
+        public BumperDef bumper;              // gesetzt = Boxauto (eigenes Fahrmodell), die Bahn dient nur als Kulisse
+    }
+
+    /// <summary>Boxauto: Fahrflaeche (Unity-Meter, Innenkante der Bande) und Fahrzeit in Sekunden.</summary>
+    public class BumperDef
+    {
+        public double cx, cz, hx, hz, duration;
+        public double[] obstacles;   // runde Hindernisse: je x, z, Radius (Unity-Meter)
+    }
+
+    /// <summary>Schiffsschaukel: Drehpunkt (Bahn-Koordinaten), Arm, Ausschlag, Ablauf in Sekunden, Sitzplatz im Boot.</summary>
+    public class SwingDef
+    {
+        public V3 pivot; public double arm, ampDeg, tUp, tHold, tDown, seatX, seatR;
     }
 
     public struct V2 { public double x, z; public V2(double x, double z) { this.x = x; this.z = z; } }
@@ -117,7 +132,48 @@ namespace Achterbahn
 
         public static TrackDef[] All()
         {
-            return new[] { Raupe(), Bergblitz(), Drache(), Monster(), Ritterburg(), WildeMaus() };
+            return new[] { Raupe(), Bergblitz(), Drache(), Monster(), Ritterburg(), WildeMaus(), Wikinger(), Schiffsschaukel(), Boxauto() };
+        }
+
+        // Neue Bahn: Wikinger-Achterbahn. Abschuss, drei Loopings, schnelle Links-Rechts-Wechsel am Boden.
+        // Booster vor Looping 2 und 3 (wie der Abschuss im Schuettelmonster). Physik und Bewegungsfilter unveraendert.
+        public static double WikLoop1 = 23.2, WikLoop2 = 23.2, WikLoop3 = 23.2;
+        static TrackDef Wikinger()
+        {
+            var pts = new List<V3>(Pts(D(-24, 3, 0), D(0, 3, 0), D(20, 3, 0), D(44, 3, 0), D(66, 3, 0), D(84, 3, 0), D(100, 3, 0)));
+            pts.AddRange(Loop(104, 0, 7, 3, WikLoop1));                                                           // Looping 1
+            pts.AddRange(Pts(D(166, 3.4, 7), D(182, 3.6, 3), D(217, 3.8, 11), D(244, 3.6, 7)));                     // Links-rechts
+            int iB2 = pts.Count - 1;
+            pts.AddRange(Pts(D(256, 3.5, 7)));
+            int iL2 = pts.Count;
+            pts.AddRange(Loop(268, 7, 7, 3.5, WikLoop2));                                                         // Looping 2
+            pts.AddRange(Pts(D(326, 3.6, 14), D(342, 3.8, 10), D(377, 3.8, 18), D(404, 3.6, 14)));                  // Links-rechts
+            int iB3 = pts.Count - 1;
+            pts.AddRange(Pts(D(416, 3.5, 14)));
+            int iL3 = pts.Count;
+            pts.AddRange(Loop(428, 14, 7, 3.5, WikLoop3));                                                        // Looping 3
+            pts.AddRange(Pts(D(486, 3.8, 21), D(500, 4, 21)));
+            pts.AddRange(Helix(515, 51, 30, 4, 4.5, .5, -Math.PI / 2, 1));                                         // Wende
+            pts.AddRange(Pts(D(495, 4.4, 81), D(465, 4.2, 75), D(430, 4.2, 87), D(395, 4.1, 75), D(360, 4, 87), D(325, 4, 77),   // schnelle Wechsel
+                D(280, 4.2, 81), D(220, 5.5, 81), D(160, 4.4, 81), D(100, 4.4, 79), D(50, 4.4, 72), D(18, 4.2, 54), D(-4, 3.8, 33), D(-30, 3.4, 17.5),
+                D(-46, 3.3, 16), D(-50, 3.25, 14.93), D(-52.93, 3.2, 12), D(-54, 3.15, 8), D(-52.93, 3.1, 4), D(-50, 3.05, 1.07), D(-46, 3, 0), D(-36, 3, 0)));
+            return new TrackDef
+            {
+                id = "wikinger", name = "Wikinger", tag = "Drei Loopings",
+                blurb = "Abschuss am Fjord, drei Loopings und blitzschnelle Links-Rechts-Wechsel.",
+                rail = C(0x5A3A22), accent = C(0xB3261E), support = C(0x4A3A2A), ground = C(0x6F8F55), sky = C(0xC9D9E6), fog = C(0xD3DEE6),
+                bankFactor = .85, bankMax = 60, trainCars = 4, points = pts.ToArray(), theme = "wikinger",
+                lake = new[] { 250f, -48f, 235f, 36f, 9f },   // Fjord suedlich des Hinwegs (nur Optik)
+                plan = t => new[]
+                {
+                    Drive(0, 20, 3, 1),
+                    Drive(20, 92, 23.5, 5, launch: true, felt: true),
+                    Drive(t.SAtPoint(iB2), t.SAtPoint(iL2), 23, 5, launch: true, felt: true),
+                    Drive(t.SAtPoint(iB3), t.SAtPoint(iL3), 23, 5, launch: true, felt: true),
+                    Brake(t.length - 84, t.length - 24, 3.6, 3.2),
+                    Stop(t.length - 24, t.length, 3.5, .8),
+                },
+            };
         }
 
         // Neue Bahn: Wilde Maus auf dem Rummel. Einzelwagen, Lift, Haarnadelkurven oben fast ohne Querneigung, dann Abfahrt mit Huckeln.
@@ -157,6 +213,36 @@ namespace Achterbahn
                     Stop(t.length - 22, t.length, 3, .8),
                 },
             };
+        }
+
+        // Schiffsschaukel auf dem Rummel neben der Wilden Maus. Die Maus-Bahn ist nur Kulisse (Wagen bleiben in der Station),
+        // gefahren wird mit dem Pendelmodell PendelRide. Drehpunkt in Unity (108, 15, -48) = Bahn-Koordinaten (108, 15, 48).
+        // Boxauto: eigenes Fahrmodell (BumperRide). Kulisse = Autoscooter-Halle bei Nacht (Thema "autoscooter", FairWorld.Scooter);
+        // die Ritterburg-Strecke dient nur als unsichtbare Rechengrundlage. Fahrflaeche und Hindernisse unveraendert.
+        static TrackDef Boxauto()
+        {
+            var d = Ritterburg();
+            d.id = "boxauto"; d.name = "Boxauto"; d.tag = "Autoscooter";
+            d.blurb = "Selbst lenken in der Kirmes-Halle, zwei Wagen rempeln mit.";
+            d.theme = "autoscooter";
+            d.rough = true;   // kraeftige Stufe: schnelle Stoesse wie im Schuettelmonster
+            d.bumper = new BumperDef
+            {
+                cx = 3, cz = 21, hx = 15, hz = 9.5, duration = 150,
+                // Brunnen-Insel in der Mitte, vier gepolsterte Eichenpfeiler
+                obstacles = new double[] { 3, 21, 2.1,  -5, 16.5, .45,  11, 16.5, .45,  -5, 25.5, .45,  11, 25.5, .45 },
+            };
+            return d;
+        }
+
+        static TrackDef Schiffsschaukel()
+        {
+            var d = WildeMaus();
+            d.id = "schaukel"; d.name = "Schiffsschaukel"; d.tag = "Mittelalter";
+            d.blurb = "Eichenschiff an Eisenarmen, schaukelt bis über die Waagerechte.";
+            d.accent = C(0x8E2A1E);
+            d.swing = new SwingDef { pivot = P(108, 15, 48), arm = 11, ampDeg = 95, tUp = 32, tHold = 24, tDown = 22, seatX = -3.6, seatR = 10.0 };
+            return d;
         }
 
         // Neue Bahn (nicht aus der HTML-Fassung): Holzachterbahn durch eine Burg.

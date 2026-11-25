@@ -12,14 +12,15 @@ namespace Achterbahn
         public static void Apply(Camera cam, Light sun, TrackDef d)
         {
             var ta = ThemeAssets.Get();
-            bool dusk = d.theme == "rummel" && ta != null && ta.duskSky != null;
-            var sky = dusk ? ta.duskSky : ta != null ? ta.sky : null;
+            bool night = d.theme == "autoscooter" && ta != null && ta.duskSky != null;
+            bool dusk = (d.theme == "rummel" || night) && ta != null && ta.duskSky != null;
+            var sky = night ? NightSky(ta.duskSky) : dusk ? ta.duskSky : ta != null ? ta.sky : null;
             if (sky != null)
             {
                 RenderSettings.skybox = sky;
                 cam.clearFlags = CameraClearFlags.Skybox;
                 RenderSettings.ambientMode = AmbientMode.Skybox;
-                RenderSettings.ambientIntensity = dusk ? .75f : 1f;
+                RenderSettings.ambientIntensity = night ? .6f : dusk ? .75f : 1f;
                 DynamicGI.UpdateEnvironment();
             }
             else
@@ -28,7 +29,15 @@ namespace Achterbahn
                 RenderSettings.ambientMode = AmbientMode.Flat; RenderSettings.ambientLight = Color.Lerp(d.sky, Color.white, .45f);
             }
             RenderSettings.fog = true; RenderSettings.fogMode = FogMode.Linear;
-            if (dusk)
+            if (night)
+            {
+                // Kirmes bei Nacht (wie die Autoscooter-Vorschau): dunkler violetter Dunst, schwaches Mondlicht
+                RenderSettings.fogMode = FogMode.Exponential; RenderSettings.fogDensity = .012f;
+                RenderSettings.fogColor = new Color(.05f, .04f, .08f);
+                sun.transform.rotation = Quaternion.Euler(38f, 60f, 0f);
+                sun.color = new Color(.55f, .62f, .9f); sun.intensity = .12f;
+            }
+            else if (dusk)
             {
                 // Blaue Stunde: violetter Dunst, tiefe rosa Sonne knapp ueber dem Horizont
                 RenderSettings.fogColor = new Color(.27f, .27f, .4f);
@@ -72,7 +81,13 @@ namespace Achterbahn
                 vignette = p.Add<Vignette>(true);
                 vol.profile = p;
             }
-            if (dusk)
+            if (night)
+            {
+                bloom.threshold.Override(.85f); bloom.intensity.Override(1.3f); bloom.scatter.Override(.74f);
+                color.postExposure.Override(.35f); color.contrast.Override(14f); color.saturation.Override(12f);
+                vignette.intensity.Override(.28f);
+            }
+            else if (dusk)
             {
                 bloom.threshold.Override(.8f); bloom.intensity.Override(1.15f); bloom.scatter.Override(.72f);
                 color.postExposure.Override(.25f); color.contrast.Override(14f); color.saturation.Override(18f);
@@ -84,6 +99,14 @@ namespace Achterbahn
                 color.postExposure.Override(.2f); color.contrast.Override(8f); color.saturation.Override(4f);
                 vignette.intensity.Override(.18f);
             }
+        }
+
+        static Material nightSky;
+        /// <summary>Nachthimmel: der Daemmerungs-Himmel, stark abgedunkelt (wie in der Autoscooter-Vorschau).</summary>
+        static Material NightSky(Material dusk)
+        {
+            if (nightSky == null) { nightSky = new Material(dusk) { name = "Nachthimmel" }; if (nightSky.HasProperty("_Exposure")) nightSky.SetFloat("_Exposure", .22f); }
+            return nightSky;
         }
 
         /// <summary>Richtung des Abendrots im Daemmerungs-Himmel (Grad), passend zur Drehung der HDRI.</summary>

@@ -7,3 +7,5 @@ Baum-Texturen (Rinde, Zweige): aus fir_tree_01 (das Modell selbst ist zu gross f
 Modelle: shrub_02, shrub_04, rock_moss_set_01, boulder_01, wooden_barrels_01, wooden_crate_01, wooden_lantern_01, large_castle_door
 
 Selbst erzeugt (Assets/Generated): fir_branch.png (Tannenzweig), grass_blades.png (Grashalme), smoke_puff.png (Rauch).
+Modelle Boxauto-Burghof (glTF 1k): lantern_chandelier_01, kite_shield, ornate_war_hammer, antique_estoc, treasure_chest, wine_barrel_01,
+          lion_head, stone_fire_pit, wooden_bucket_01, cannon_01
