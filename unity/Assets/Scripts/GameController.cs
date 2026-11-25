@@ -58,7 +58,11 @@ namespace Achterbahn
             // Im Editor nur nach ausdruecklicher Freigabe (Menue "Achterbahn/Sitz im Editor verbinden"),
             // damit Test- und Entwicklungsfahrten nie unbemerkt den echten Sitz bewegen.
             if (NoSeatArg) Debug.Log("Achterbahn: Start mit -ohnesitz, keine Verbindung zur Bruecke.");
-            else if (!Application.isEditor || EditorSeatAllowed) bridge.Start();
+            else if (!Application.isEditor || EditorSeatAllowed)
+            {
+                BridgeStarter.Starten();   // nur in der EXE: Bruecke unsichtbar mitstarten, falls sie nicht schon laeuft
+                bridge.Start();
+            }
             else Debug.Log("Achterbahn: Sitz-Verbindung im Editor gesperrt.");
             if (NoSeatArg) StartCoroutine(TestRun());
         }
@@ -116,7 +120,7 @@ namespace Achterbahn
 #endif
         }
 
-        void OnApplicationQuit() { bridge.Stop(); net.Stop(); }
+        void OnApplicationQuit() { bridge.Stop(); net.Stop(); BridgeStarter.Beenden(); }
         void OnDestroy() { bridge.Stop(); net.Stop(); }
 
         // Wie die HTML-Fassung beim Verstecken der Seite: Fenster verliert den Fokus -> Pause, Sitz blendet aus.
@@ -678,8 +682,8 @@ namespace Achterbahn
         string LinkText(out Color c)
         {
             if (Application.isEditor && !EditorSeatAllowed) { c = new Color(.8f, .8f, .8f); return "Editor: Sitz gesperrt"; }
-            if (!bridge.Connected) { c = new Color(.8f, .8f, .8f); return "Vorschau ohne Sitz"; }
-            if (!bridge.Sig) { c = new Color(1f, .75f, .3f); return "SimHub-Einrichtung fehlt, siehe Konsolenfenster"; }
+            if (!bridge.Connected) { c = new Color(.8f, .8f, .8f); return BridgeStarter.Status == "Brücke nicht gefunden" ? "Vorschau ohne Sitz (Brücke nicht gefunden)" : BridgeStarter.Gestartet ? "Verbinde mit der Brücke …" : "Vorschau ohne Sitz"; }
+            if (!bridge.Sig) { c = new Color(1f, .75f, .3f); return BridgeStarter.Gestartet ? "SimHub-Einrichtung fehlt, siehe Bruecke\\bruecke.log" : "SimHub-Einrichtung fehlt, siehe Konsolenfenster"; }
             if (!bridge.Simhub) { c = new Color(1f, .75f, .3f); return "SimHub empfängt noch nicht"; }
             c = new Color(.4f, 1f, .5f); return "Sitz verbunden";
         }
@@ -782,7 +786,7 @@ namespace Achterbahn
             if (GUI.Button(new Rect(W / 2 - 160, y + 175, 320, 64), "Los geht's", sBtn)) StartRide();
             if (bridge.Connected && GUI.Button(new Rect(W / 2 + 180, y + 185, 200, 46), "Sitz testen", sBtn)) StartTest();
             if (!bridge.Connected)
-                GUI.Label(new Rect(x0, y + 250, W - 2 * x0, 30), "Für den Sitz zuerst „Bruecke fuer Unity starten.bat“ im Achterbahn-Ordner starten. Nicht gleichzeitig das HTML-Spiel offen haben.", sSmall);
+                GUI.Label(new Rect(x0, y + 250, W - 2 * x0, 30), "Für den Sitz: SimHub starten. Das Spiel startet die Brücke selbst mit (Ordner „Bruecke“ neben der EXE). Nicht gleichzeitig das HTML-Spiel offen haben.", sSmall);
             if (cur.bumper != null)
             {
                 // Lenkrad wie im echten Autoscooter: 1:1 aufs Antriebsrad, daher den eingestellten Lenkbereich des Rads angeben

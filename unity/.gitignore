@@ -21,3 +21,7 @@ Assets/Resources/PerformanceTestRun*.json.meta
 # Viking Village (Unity Asset Store, Standard-EULA): darf nicht ins oeffentliche Repo
 /Assets/Viking Village/
 /Assets/Viking Village.meta
+
+# Bruecke neben der Unity-EXE: die EXE kommt aus dem CI-Build (Release), nicht ins Repo
+/Bruecke/*.exe
+/Bruecke/*.log

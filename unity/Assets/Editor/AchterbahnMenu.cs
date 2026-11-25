@@ -62,6 +62,23 @@ namespace Achterbahn.EditorTools
             Debug.Log("Achterbahn-Build: " + report.summary.result + " -> " + opts.locationPathName);
             if (report.summary.result != BuildResult.Succeeded)
                 throw new System.Exception("Build fehlgeschlagen: " + report.summary.result);
+            BrueckeMitkopieren(outDir);
+        }
+
+        /// <summary>Legt den Ordner "Bruecke" (Projektordner\Bruecke: Achterbahn-Bruecke.exe und .bat) neben die gebaute EXE.
+        /// Das Spiel startet die Bruecke dann selbst (BridgeStarter).</summary>
+        public static void BrueckeMitkopieren(string outDir)
+        {
+            string src = Path.Combine(Directory.GetParent(Application.dataPath).FullName, "Bruecke"), dst = Path.Combine(outDir, "Bruecke");
+            if (!File.Exists(Path.Combine(src, "Achterbahn-Bruecke.exe"))) { Debug.LogWarning("Achterbahn-Build: Bruecke fehlt in " + src + " – das Spiel kann sie dann nicht selbst starten."); return; }
+            Directory.CreateDirectory(dst);
+            foreach (var f in Directory.GetFiles(src))
+            {
+                if (Path.GetFileName(f).EndsWith(".log")) continue;
+                try { File.Copy(f, Path.Combine(dst, Path.GetFileName(f)), true); }
+                catch (IOException e) { Debug.LogWarning("Achterbahn-Build: " + Path.GetFileName(f) + " nicht kopiert (laeuft die Bruecke gerade?): " + e.Message); }
+            }
+            Debug.Log("Achterbahn-Build: Bruecke mitkopiert -> " + dst);
         }
     }
 }
